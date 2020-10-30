@@ -28,5 +28,6 @@ module.exports = {
         'no-use-before-define': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
+        'react/no-array-index-key': 'off',
     },
 };

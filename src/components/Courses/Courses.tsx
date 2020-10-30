@@ -4,8 +4,6 @@ import { CoursesStore } from 'src/stores/Courses';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
 
-console.info(styles);
-
 function _Courses() {
     useEffect(() => {
         CoursesStore.list.loadIfNotLoaded();
