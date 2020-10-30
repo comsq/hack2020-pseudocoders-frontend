@@ -1,8 +1,8 @@
 import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useRef, useState } from 'react';
-import styles from 'src/components/MonitorPage/MonitorPage.module.css';
+import styles from 'src/components/TeacherPage/TeacherMonitor/MonitorPage.module.css';
 import { observer } from 'mobx-react-lite';
-import { MonitorStore } from 'src/components/MonitorPage/MonitorStore';
+import { MonitorStore } from 'src/components/TeacherPage/TeacherMonitor/MonitorStore';
 import { Button, Input, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import Highlighter from 'react-highlight-words';
