@@ -21,11 +21,12 @@ function _Login() {
         try {
             await UserStore.login(values);
         } catch (error) {
-            const statusText = error?.response.statusText;
+            console.info(error);
+            const statusText = error.response?.statusText;
             const errorText =
-                error?.response.status === 401
+                error.response?.status === 401
                     ? 'Пользователь не найден'
-                    : statusText;
+                    : statusText || error.message;
             message.error(`Не удалось войти. ${errorText}`);
         }
     }
