@@ -1,5 +1,6 @@
 .user {
-    display: flex;
+    display: inline-flex;
+    float: right;
     margin-left: auto;
     align-items: center;
 }

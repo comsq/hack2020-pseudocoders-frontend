@@ -34,5 +34,6 @@ module.exports = {
         'no-shadow': 'off',
         camelcase: 'off',
         '@typescript-eslint/no-explicit-any': 'off',
-    },
+        "no-unused-vars": "off" 
+    }
 };
