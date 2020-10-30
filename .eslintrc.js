@@ -27,5 +27,6 @@ module.exports = {
         'prettier/prettier': 'error',
         'no-use-before-define': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
     },
 };

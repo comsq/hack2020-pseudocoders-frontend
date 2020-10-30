@@ -4,6 +4,7 @@ export class WithLoadingFlags<Result = unknown> {
     isLoading = true;
     isLoaded = false;
     hasError = false;
+    // @ts-ignore
     data: Result;
     action: () => Promise<Result>;
 
