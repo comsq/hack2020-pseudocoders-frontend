@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from 'src/components/Courses/Courses.css';
+import styles from 'src/components/Courses/Courses.module.css';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
 

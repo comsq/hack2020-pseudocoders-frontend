@@ -1,6 +1,6 @@
 import { Link } from '@reach/router';
 import React from 'react';
-import styles from 'src/components/AppHeader/AppHeader.css';
+import styles from 'src/components/AppHeader/AppHeader.module.css';
 
 export function AppHeader() {
     const id = 1;

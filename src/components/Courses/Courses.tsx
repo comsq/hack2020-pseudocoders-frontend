@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import styles from 'src/components/Courses/Courses.css';
+import styles from 'src/components/Courses/Courses.module.css';
 import { CoursesStore } from 'src/stores/Courses';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
+
+console.info(styles);
 
 function _Courses() {
     useEffect(() => {
