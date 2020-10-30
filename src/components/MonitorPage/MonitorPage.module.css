@@ -1,0 +1,18 @@
+.monitorPage {
+    display: flex;
+}
+
+.searchInput {
+    width: 188px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.searchButton {
+    width: 90px;
+}
+
+.highlight {
+    background-color: #ffc069;
+    padding: 0;
+}
