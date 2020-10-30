@@ -1,3 +1,9 @@
 .user {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
 
+.user *:not(:last-child) {
+    margin-right: 10px;
 }

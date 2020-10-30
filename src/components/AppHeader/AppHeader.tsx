@@ -1,15 +1,22 @@
 import { Link } from '@reach/router';
 import React from 'react';
 import styles from 'src/components/AppHeader/AppHeader.module.css';
-import { Button } from 'antd';
+import { UserStore } from 'src/stores/User';
+import { observer } from 'mobx-react-lite';
+import { User } from 'src/components/User/User';
 
-export function AppHeader() {
-    const id = 1;
+function _AppHeader() {
+    if (!UserStore.user) {
+        return null;
+    }
+
     return (
         <div className={styles.appHeader}>
-            <Button type="primary">Button</Button>
             <Link to="/courses">Курсы</Link>
-            <Link to={`/users/${id}`}>Профиль</Link>
+
+            <User />
         </div>
     );
 }
+
+export const AppHeader = observer(_AppHeader);

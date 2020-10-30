@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import '../src/index.css';
 import App from '../src/App';
 import reportWebVitals from '../src/reportWebVitals';
-
+import axios from 'axios';
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
@@ -16,13 +16,10 @@ configure({
     enforceActions: 'never',
 });
 
+axios.defaults.baseURL = 'http://130.193.41.149/';
+
 function renderApp() {
-    ReactDOM.render(
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>,
-        document.querySelector('#root'),
-    );
+    ReactDOM.render(<App />, document.querySelector('#root'));
 }
 
 renderApp();

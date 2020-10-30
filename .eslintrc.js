@@ -29,5 +29,8 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         'react/no-array-index-key': 'off',
+        'unicorn/consistent-function-scoping': 'off',
+        'unicorn/no-abusive-eslint-disable': 'off',
+        'no-shadow': 'off',
     },
 };
