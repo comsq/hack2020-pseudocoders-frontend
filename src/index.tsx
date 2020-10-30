@@ -16,7 +16,7 @@ configure({
     enforceActions: 'never',
 });
 
-axios.defaults.baseURL = 'https://pseudocoders.online/';
+axios.defaults.baseURL = 'https://api.pseudocoders.online/';
 
 function renderApp() {
     ReactDOM.render(<App />, document.querySelector('#root'));
