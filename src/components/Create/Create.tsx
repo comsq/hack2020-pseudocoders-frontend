@@ -1,11 +1,12 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import styles from 'src/components/Create/Create.module.css';
 import { CreateStore, ILanguage } from 'src/stores/Create';
+import { UserStore } from 'src/stores/User';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
 import ReactQuill from 'react-quill';
-import { Input, Button } from 'antd';
 import { Select } from 'src/antd-extended/Select';
+import { Input, Button, message } from 'antd';
 import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
 import { useDebouncedCallback } from 'use-debounce';
@@ -97,19 +98,24 @@ function _Create() {
         })();
     }, []);
 
-    const onSaveTask = useCallback(() => {
-        CreateStore.saveTask({
-            name: getLocalStorageValue(localStorageName),
-            languages: getLocalStorageValue(localStorageLanguages),
-            description: getLocalStorageValue(localStorageDescription),
-            tests: getLocalStorageValue(localStorageTests),
-        });
-        saveInLocalStorage(localStorageSave, 'on');
-    }, []);
+    const [description, setDescription] = useState(getLocalStorageValue(localStorageDescription));
 
-    useEffect(() => {
-        if (getLocalStorageValue(localStorageSave) === 'on') {
-            if (!CreateStore.saveProcess && CreateStore.saveStatus === 200) {
+    const [tests, setTests] = useState<Test[]>(getLocalStorageValue(localStorageTests, [{ input: '', output: '' }]));
+
+    const [name, setName] = useState(getLocalStorageValue(localStorageName));
+
+    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, []));
+
+    const onSaveTask = useCallback(() => {
+        (async () => {
+            const status = await CreateStore.saveTask({
+                author: UserStore.user?.id,
+                name: getLocalStorageValue(localStorageName),
+                languages: getLocalStorageValue(localStorageLanguages),
+                description: getLocalStorageValue(localStorageDescription),
+                tests: getLocalStorageValue(localStorageTests),
+            });
+            if (status >= 200 && status < 300) {
                 const keys = [
                     localStorageName,
                     localStorageDescription,
@@ -120,19 +126,12 @@ function _Create() {
                 keys.forEach((key) => {
                     localStorage.removeItem(key);
                 });
+                window.location.pathname = '/tasks';
             } else {
-                console.log('error', CreateStore.saveStatus);
+                message.error('Произошла ошибка, попробуйте ещё раз');
             }
-        }
-    }, [CreateStore.saveProcess, CreateStore.saveStatus]);
-
-    const [description, setDescription] = useState(getLocalStorageValue(localStorageDescription));
-
-    const [tests, setTests] = useState<Test[]>(getLocalStorageValue(localStorageTests, [{ input: '', output: '' }]));
-
-    const [name, setName] = useState(getLocalStorageValue(localStorageName));
-
-    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, []));
+        })();
+    }, []);
 
     const debouncedSaveInLocalStorage = useDebouncedCallback((nameVariable, value) => {
         saveInLocalStorage(nameVariable, value);
