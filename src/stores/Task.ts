@@ -23,6 +23,7 @@ export type ITask = {
     description: string;
     slug: string;
     tests: ITest[];
+    verdict?: string;
 };
 
 export type SimpleTask = Pick<ITask, 'id' | 'name' | 'slug'>;
@@ -38,12 +39,18 @@ function getApi() {
 
             return res.data;
         },
+        async loadListByUser(user_id: number) {
+            const res = await axios.get<ITask[]>(`/api/users/${user_id}/tasks/`);
+
+            return res.data;
+        }
     };
 }
 
 class TaskStoreClass {
     api = getApi();
     task: ITask | null = null;
+    listUser: ITask[] | null = null;
     list = new WithLoadingFlags<ITask[]>(this.api.loadList);
 
     constructor() {
@@ -53,6 +60,11 @@ class TaskStoreClass {
     async getTask(id: string) {
         const task = await this.api.loadTask(id);
         this.task = task;
+    }
+
+    async getListByUser(user_id: number) {
+        const listUser = await this.api.loadListByUser(user_id);
+        this.listUser = listUser;
     }
 }
 

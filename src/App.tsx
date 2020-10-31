@@ -9,12 +9,12 @@ import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { IUser, UserStore, UserType } from 'src/stores/User';
 import { NotFound } from 'src/components/NotFound/NotFound';
 import { TeacherCreateTask } from 'src/components/Create';
-import { TeacherTasks } from 'src/components/TeacherPage/TeacherTasks/TeacherTasks';
 import { TeacherStudents } from 'src/components/TeacherPage/TeacherStudents/TeacherStudents';
-import { TeacherMonitor } from 'src/components/TeacherPage/TeacherMonitor/TeacherMonitor';
+import { CommonMonitor } from 'src/components/CommonMonitor/CommonMonitor';
 import { Task } from 'src/components/Task/Task';
+import { CommonTasks } from 'src/components/CommonTasks/CommonTasks';
 
-function _App() {
+function _App(props: any) {
     useEffect(() => {
         const user = LocalStorageSafe.getItem<IUser>('user');
         if (!user) {
@@ -26,22 +26,20 @@ function _App() {
         UserStore.setCheckLogin();
     }, []);
 
-    const IndexComponent = TeacherTasks;
-
     return (
         <div className={styles.app}>
             <Router className={styles.router}>
                 {UserStore.user?.type === UserType.teacher && (
                     <>
                         <TeacherCreateTask path="/create" />
-                        <TeacherTasks path="/tasks" />
                         <TeacherStudents path="/students" />
                     </>
                 )}
-                <TeacherMonitor path="/monitoring" />
-                <IndexComponent path="/" />
-                <Login path="/login" />
-                <Task path="/task/:id" />
+                <CommonMonitor path="monitoring" />
+                <CommonTasks path="/" />
+                <CommonTasks path="tasks" />
+                <Login path="login" />
+                <Task path="task/:id" />
                 <NotFound default />
             </Router>
         </div>

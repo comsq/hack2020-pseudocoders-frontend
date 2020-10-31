@@ -1,0 +1,57 @@
+:global(.ant-pagination) {
+    padding-right: 20px;
+}
+
+.monitorPage {
+    display: flex;
+}
+
+.searchInput {
+    width: 188px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.searchButton {
+    width: 90px;
+}
+
+.highlight {
+    background-color: #ffc069;
+    padding: 0;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+}
+
+.running {
+    color: blue;
+}
+
+.stopped,
+.ce,
+.re,
+.tle,
+.wa {
+    color: red;
+}
+
+.ok {
+    color: green;
+}
+
+.stopped,
+.running,
+.ce,
+.re,
+.tle,
+.wa,
+.ok {
+    width: 60px;
+}
+
+.status > *:not(:last-child) {
+    margin-right: 10px;
+}
