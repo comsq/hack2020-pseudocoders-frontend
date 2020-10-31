@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
+import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,6 +21,8 @@ export type IUser = {
     type: UserType;
 };
 
+export type SimpleUser = Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'>;
+
 export type IEditor = {
     status: 'running' | 'exited';
     port?: number;
@@ -33,6 +36,11 @@ function getApi() {
                 login,
                 password,
             });
+            return res.data;
+        },
+        async loadList() {
+            const res = await axios.get<IUser[]>('/api/users/');
+
             return res.data;
         },
 
@@ -73,6 +81,8 @@ class UserStoreClass {
     checkLogin = false;
     user: IUser | null = null;
     editor: IEditor | null = null;
+
+    list = new WithLoadingFlags<IUser[]>(this.api.loadList);
 
     constructor() {
         makeAutoObservable(this);
@@ -119,5 +129,11 @@ class UserStoreClass {
         this.setEditor(editor);
     }
 }
+
+export const UserUtils = {
+    getFullName(user: SimpleUser) {
+        return `${user.first_name} ${user.last_name}`;
+    },
+};
 
 export const UserStore = new UserStoreClass();

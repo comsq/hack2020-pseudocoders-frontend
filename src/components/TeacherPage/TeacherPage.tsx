@@ -3,38 +3,37 @@ import { observer } from 'mobx-react-lite';
 
 import { DefaultLayout } from 'src/components/DefaultLayout/DefaultLayout';
 import { UserStore } from 'src/stores/User';
+import { ArrayHelper } from 'src/helpers/ArrayHelper';
 
 interface ITeacherPage {
     path: string;
     children: React.ReactNode;
 }
 
-const menuItems = [
-    {
-        title: 'Задачи',
-        path: 'tasks',
-    },
-    {
-        title: 'Ученики',
-        path: 'students',
-    },
-    {
-        title: 'Монитор',
-        path: 'monitoring',
-    },
-];
-
 function _TeacherPage({ path, children }: ITeacherPage) {
-    const extMenuItems = Array.from(menuItems);
-
-    if (UserStore.editor?.status === 'running') {
-        extMenuItems.push({
-            title: 'Редактор',
-            path: `http://api.pseudocoders.online:${UserStore.editor.port}`,
-        });
+    function getMenuItems() {
+        return ArrayHelper.clearNullable([
+            {
+                title: 'Задачи',
+                path: 'tasks',
+            },
+            {
+                title: 'Ученики',
+                path: 'students',
+            },
+            {
+                title: 'Монитор',
+                path: 'monitoring',
+            },
+            UserStore.editor?.status === 'running' && {
+                title: 'Редактор',
+                path: `http://api.pseudocoders.online:${UserStore.editor.port}`,
+            },
+        ]);
     }
 
-    const startIndexMenuItem = extMenuItems.findIndex((item) => item.path === path);
+    const menuItems = getMenuItems();
+    const startIndexMenuItem = menuItems.findIndex((item) => item.path === path);
 
     if (startIndexMenuItem === -1) {
         throw new Error('invalid path');
@@ -43,7 +42,7 @@ function _TeacherPage({ path, children }: ITeacherPage) {
     const [indexMenuItem, setIndexMenuItem] = useState(startIndexMenuItem);
 
     return (
-        <DefaultLayout menuItems={extMenuItems} indexMenuItem={indexMenuItem} setIndexMenuItem={setIndexMenuItem}>
+        <DefaultLayout menuItems={menuItems} indexMenuItem={indexMenuItem} setIndexMenuItem={setIndexMenuItem}>
             {children}
         </DefaultLayout>
     );
