@@ -12,6 +12,7 @@ import { TeacherCreateTask } from 'src/components/Create';
 import { TeacherTasks } from 'src/components/TeacherPage/TeacherTasks/TeacherTasks';
 import { TeacherStudents } from 'src/components/TeacherPage/TeacherStudents/TeacherStudents';
 import { TeacherMonitor } from 'src/components/TeacherPage/TeacherMonitor/TeacherMonitor';
+import { Task } from 'src/components/Task/Task';
 
 function _App() {
     useEffect(() => {
@@ -40,6 +41,7 @@ function _App() {
                 )}
                 <IndexComponent path="/" />
                 <Login path="login" />
+                <Task path="task/:id" />
                 <NotFound default />
             </Router>
         </div>
