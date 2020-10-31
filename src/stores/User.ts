@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { makeAutoObservable } from 'mobx';
+import { computed, makeAutoObservable } from 'mobx';
 import { AsyncHelper } from 'src/helpers/AsyncHelper';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
@@ -16,7 +16,22 @@ export type IUser = {
     last_name: string;
     email: string;
     type: UserType;
+    isTeacher: boolean;
+    isStudent: boolean;
 };
+
+type IUserFromApi = {
+    id: number;
+    login: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+} & (
+    | {
+          user_type: UserType;
+      }
+    | { type: UserType }
+);
 
 export type SimpleUser = Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'>;
 
@@ -26,19 +41,28 @@ export type IEditor = {
     isLoading?: boolean;
 };
 
+function deserializeUser(user: IUserFromApi): IUser {
+    const type = ('user_type' in user && user.user_type) || (('type' in user && user.type) as UserType);
+    return {
+        ...user,
+        isTeacher: type === UserType.teacher,
+        isStudent: type === UserType.student,
+        type,
+    };
+}
 function getApi() {
     return {
         async login({ login, password }: { login: string; password: string }) {
-            const res = await axios.post<IUser>('/api/login/', {
+            const res = await axios.post<IUserFromApi>('/api/login/', {
                 login,
                 password,
             });
-            return res.data;
+            return deserializeUser(res.data);
         },
         async loadList() {
-            const res = await axios.get<IUser[]>('/api/users/');
+            const res = await axios.get<IUserFromApi[]>('/api/users/');
 
-            return res.data;
+            return res.data.map((user) => deserializeUser(user));
         },
 
         async editorStatus(userId: number) {
@@ -80,6 +104,13 @@ class UserStoreClass {
     editor: IEditor | null = null;
 
     list = new WithLoadingFlags<IUser[]>(this.api.loadList);
+    @computed get teachers() {
+        return this.list.data?.filter((user) => user.isTeacher);
+    }
+
+    @computed get students() {
+        return this.list.data?.filter((user) => user.isStudent);
+    }
 
     constructor() {
         makeAutoObservable(this);

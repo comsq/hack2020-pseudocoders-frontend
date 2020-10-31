@@ -3,9 +3,10 @@ import { observer } from 'mobx-react-lite';
 import { Group, GroupStore } from 'src/components/TeacherPage/TeacherStudents/GroupStore';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import styles from './GroupsPage.module.css';
-import { Form, List, Select, PageHeader, Button, Modal, Input, message } from 'antd';
+import { Form, List, PageHeader, Button, Modal, Input, message } from 'antd';
 import { UserStore, UserUtils } from 'src/stores/User';
 import { TaskStore } from 'src/stores/Task';
+import { Select } from 'src/antd-extended/Select';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 const { Option } = Select;
 
@@ -57,13 +58,15 @@ function _GroupsPage() {
     }
 
     function renderDropdownGroups() {
-        const options = GroupStore.list.data.map((group) => {
-            return (
-                <Option key={group.id} value={group.id}>
-                    {group.name}
-                </Option>
-            );
-        });
+        const options = GroupStore.list.data
+            .filter((group) => group.owner === UserStore.user?.id)
+            .map((group) => {
+                return (
+                    <Option key={group.id} value={group.id}>
+                        {group.name}
+                    </Option>
+                );
+            });
         return (
             <Form.Item label="Группа учеников">
                 <Select value={currentGroup?.id} style={{ width: 300 }} onChange={handleChange}>
@@ -155,7 +158,7 @@ function _GroupsPage() {
                         rules={[{ required: true, message: 'Выберите хотя бы одного ученика' }]}
                     >
                         <Select placeholder="Выберите учеников" mode="multiple">
-                            {UserStore.list.data.map((user) => (
+                            {UserStore.students.map((user) => (
                                 <Option key={user.id} value={user.id}>
                                     {UserUtils.getFullName(user)}
                                 </Option>
