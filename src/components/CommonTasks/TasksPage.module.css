@@ -2,10 +2,6 @@
     padding-right: 20px;
 }
 
-.monitorPage {
-    display: flex;
-}
-
 .searchInput {
     width: 188px;
     margin-bottom: 8px;
@@ -21,37 +17,6 @@
     padding: 0;
 }
 
-.status {
-    display: flex;
-    align-items: center;
-}
-
-.running {
-    color: blue;
-}
-
-.stopped,
-.ce,
-.re,
-.tle,
-.wa {
-    color: red;
-}
-
-.ok {
-    color: green;
-}
-
-.stopped,
-.running,
-.ce,
-.re,
-.tle,
-.wa,
-.ok {
-    width: 60px;
-}
-
-.status > *:not(:last-child) {
-    margin-right: 10px;
+.createButton {
+    margin: 20px 16px;
 }

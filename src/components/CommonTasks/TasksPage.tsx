@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { RouteComponentProps, Link } from '@reach/router';
+import { RouteComponentProps, Link, navigate } from '@reach/router';
 import { ColumnsType } from 'antd/lib/table';
 import { Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
@@ -161,6 +161,15 @@ function _TasksPage() {
 
     return (
         <div>
+            {user?.type === UserType.teacher && (
+                <Button
+                    type="primary"
+                    onClick={() => navigate('/create')}
+                    className={styles.createButton}
+                >
+                    Создать задачу
+                </Button>
+            )}
             <Table<RecordType>
                 locale={{
                     emptyText: 'пустой список',
