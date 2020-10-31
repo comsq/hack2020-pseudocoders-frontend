@@ -42,7 +42,6 @@ function _TasksPage() {
             {
                 title: 'Задача',
                 dataIndex: 'name',
-                sorter: getStringSorter('name'),
             },
             UserStore.user?.type === UserType.student && (
                 {
@@ -190,7 +189,13 @@ function _TasksPage() {
 
     return (
         <div>
-            <Table<RecordType> dataSource={getDataSource()} columns={getColumns()} />
+            <Table<RecordType>
+                locale={{
+                    emptyText: 'пустой список',
+                }}
+                dataSource={getDataSource()}
+                columns={getColumns()}
+            />
         </div>
     )
 }
