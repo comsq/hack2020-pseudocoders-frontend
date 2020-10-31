@@ -6,8 +6,6 @@ import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
 import { TasksPage } from './TasksPage';
 
 function _CommonTasks() {
-    // const role = UserStore.user?.type;
-    // const Component = role === UserType.teacher ? TeacherPage : StudentPage;
     return (
         <WrapperUser>
             <TeacherPage path="tasks">
