@@ -18,10 +18,12 @@ function _TaskPage({ slug }: any) {
     const [lang, setLanguage] = useState('');
 
     useEffect(() => {
-        (async () => {
-            await TaskStore.getTask(slug);
-        })();
-    }, []);
+        TaskStore.getTask(slug);
+
+        return () => {
+            TaskStore.resetTask();
+        };
+    }, [slug]);
 
     const handleSendTask = useCallback(() => {
         console.log('lang', lang);

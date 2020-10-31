@@ -80,6 +80,10 @@ class TaskStoreClass {
     async sendTask(userId: string, taskId: string, lang: string) {
         await this.api.sendTask(userId, taskId, lang);
     }
+
+    resetTask() {
+        this.task = null;
+    }
 }
 
 export const TaskStore = new TaskStoreClass();
