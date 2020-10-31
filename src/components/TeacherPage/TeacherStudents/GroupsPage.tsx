@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import slugify from 'slugify';
 import { Group, GroupStore } from 'src/components/TeacherPage/TeacherStudents/GroupStore';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import styles from './GroupsPage.module.css';
@@ -99,7 +100,7 @@ function _GroupsPage() {
                     users: studentIds,
                     tasks: taskIds,
                     owner: UserStore.user!.id,
-                    slug: name + Math.random(),
+                    slug: slugify(name),
                 });
             }
             setVisibleCreateGroupModal(false);
