@@ -7,8 +7,9 @@ import { RouteComponentProps } from '@reach/router';
 import { TaskStore } from 'src/stores/Task';
 import { observer } from 'mobx-react-lite';
 import 'react-quill/dist/quill.snow.css';
-import { Button, Select } from 'antd';
+import { Button } from 'antd';
 
+import { Select } from 'src/antd-extended/Select';
 const { Option } = Select;
 
 function _TaskPage({ slug }: any) {
