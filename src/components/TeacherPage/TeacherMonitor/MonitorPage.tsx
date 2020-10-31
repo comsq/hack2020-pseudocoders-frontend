@@ -8,7 +8,9 @@ import { ColumnsType } from 'antd/lib/table';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
-import { UserUtils } from 'src/stores/User';
+import { UserStore, UserType, UserUtils } from 'src/stores/User';
+import { ArrayHelper } from 'src/helpers/ArrayHelper';
+import { TaskStore } from 'src/stores/Task';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 function _MonitorPage() {
@@ -18,17 +20,18 @@ function _MonitorPage() {
 
     useEffect(() => {
         MonitorStore.list.addConsumer();
+        TaskStore.list.loadWithSavingState();
 
         return () => {
             MonitorStore.list.removeConsumer();
         };
     }, []);
 
-    if (MonitorStore.list.isLoading) {
+    if (MonitorStore.list.isLoading || TaskStore.list.isLoading) {
         return <PageSpinner />;
     }
 
-    if (MonitorStore.list.hasError) {
+    if (MonitorStore.list.hasError || TaskStore.list.hasError) {
         return <>Монитор недоступен</>;
     }
 
@@ -37,18 +40,25 @@ function _MonitorPage() {
     }
 
     function getColumns(): ColumnsType<RecordType> {
-        return [
+        return ArrayHelper.clearNullable([
             {
                 title: 'Дата',
                 dataIndex: 'date',
                 sorter: (data1, data2) => Number(data1.dateObj) - Number(data2.dateObj),
             },
-            {
-                title: 'Ученик',
-                dataIndex: 'userName',
-                sorter: getStringSorter('userName'),
-                ...getColumnSearchProps('userName'),
-            },
+            UserStore.user?.type === UserType.teacher
+                ? {
+                      title: 'Ученик',
+                      dataIndex: 'userName',
+                      sorter: getStringSorter('userName'),
+                      ...getColumnSearchProps('userName'),
+                  }
+                : {
+                      title: 'Автор задачи',
+                      dataIndex: 'userName',
+                      sorter: getStringSorter('userName'),
+                      ...getColumnSearchProps('userName'),
+                  },
             {
                 title: 'Задача',
                 dataIndex: 'taskName',
@@ -70,7 +80,7 @@ function _MonitorPage() {
                 title: 'Количество пройденных тестов',
                 dataIndex: 'testCount',
             },
-        ];
+        ]);
     }
 
     function getDataSource() {
@@ -78,11 +88,12 @@ function _MonitorPage() {
             ({ date, user, task, language, id, passed_tests_count, tests_count, status }) => {
                 const dateObj = new Date(date);
                 const percent = Math.round((passed_tests_count * 100) / tests_count);
+                const taskInfo = TaskStore.list.data.find((t) => t.id === task.id)!;
                 return {
                     key: id,
                     dateObj,
                     date: `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`,
-                    userName: UserUtils.getFullName(user),
+                    userName: UserUtils.getFullName(UserStore.user?.type === UserType.teacher ? user : taskInfo.author),
                     taskName: task.name,
                     language: language.name,
                     testCount: `${passed_tests_count}/${tests_count}`,

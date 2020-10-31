@@ -36,9 +36,9 @@ function _App() {
                         <TeacherCreateTask path="create" />
                         <TeacherTasks path="tasks" />
                         <TeacherStudents path="students" />
-                        <TeacherMonitor path="monitoring" />
                     </>
                 )}
+                <TeacherMonitor path="monitoring" />
                 <IndexComponent path="/" />
                 <Login path="login" />
                 <Task path="task/:id" />

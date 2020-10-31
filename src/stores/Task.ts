@@ -4,7 +4,7 @@ import axios from 'axios';
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 
 interface IAuthor {
-    id: string;
+    id: number;
     login: string;
     last_name: string;
     first_name: string;
@@ -24,6 +24,8 @@ export type ITask = {
     slug: string;
     tests: ITest[];
 };
+
+export type SimpleTask = Pick<ITask, 'id' | 'name' | 'slug'>;
 
 function getApi() {
     return {

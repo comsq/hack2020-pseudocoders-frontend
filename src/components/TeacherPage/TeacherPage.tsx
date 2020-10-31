@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DefaultLayout } from 'src/components/DefaultLayout/DefaultLayout';
-import { UserStore } from 'src/stores/User';
+import { UserStore, UserType } from 'src/stores/User';
 import { ArrayHelper } from 'src/helpers/ArrayHelper';
 
 interface ITeacherPage {
@@ -17,7 +17,7 @@ function _TeacherPage({ path, children }: ITeacherPage) {
                 title: 'Задачи',
                 path: 'tasks',
             },
-            {
+            UserStore.user?.type === UserType.teacher && {
                 title: 'Ученики',
                 path: 'students',
             },
