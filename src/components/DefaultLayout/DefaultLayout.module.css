@@ -2,7 +2,8 @@
     background-color: white;
 }
 
-:global(.ant-layout-header), :global(.ant-menu) {
+:global(.ant-layout-header),
+:global(.ant-menu) {
     background: #000d24 !important;
 }
 
