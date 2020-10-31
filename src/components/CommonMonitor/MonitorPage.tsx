@@ -1,12 +1,12 @@
 import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useRef, useState } from 'react';
-import styles from 'src/components/TeacherPage/TeacherMonitor/MonitorPage.module.css';
+import styles from 'src/components/CommonMonitor/MonitorPage.module.css';
 import { observer } from 'mobx-react-lite';
-import { MonitorStore, TaskStatus } from 'src/components/TeacherPage/TeacherMonitor/MonitorStore';
 import { Button, Input, Progress, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import { MonitorStore, TaskStatus } from 'src/components/CommonMonitor/MonitorStore';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import { UserStore, UserType, UserUtils } from 'src/stores/User';
 import { ArrayHelper } from 'src/helpers/ArrayHelper';

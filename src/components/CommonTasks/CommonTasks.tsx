@@ -4,16 +4,16 @@ import { observer } from 'mobx-react-lite';
 
 import { WrapperUser } from 'src/components/WrapperUser/WrapperUser';
 import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
-import { MonitorPage } from './MonitorPage';
+import { TasksPage } from './TasksPage';
 
-function _TeacherMonitor() {
+function _CommonTasks() {
     return (
         <WrapperUser>
-            <TeacherPage path="monitoring">
-                <MonitorPage />
+            <TeacherPage path="tasks">
+                <TasksPage />
             </TeacherPage>
         </WrapperUser>
     );
 }
 
-export const TeacherMonitor = observer<RouteComponentProps>(_TeacherMonitor);
+export const CommonTasks = observer<RouteComponentProps>(_CommonTasks);
