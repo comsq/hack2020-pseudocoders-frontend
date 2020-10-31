@@ -1,6 +1,8 @@
+/* eslint-disable sonarjs/cognitive-complexity,max-lines */
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import styles from 'src/components/Create/Create.module.css';
 import { CreateStore, ILanguage } from 'src/stores/Create';
+import { TaskStore } from 'src/stores/Task';
 import { UserStore } from 'src/stores/User';
 import { observer } from 'mobx-react-lite';
 import { navigate, RouteComponentProps } from '@reach/router';
@@ -12,7 +14,6 @@ import 'react-quill/dist/quill.snow.css';
 import { useDebouncedCallback } from 'use-debounce';
 
 import TestBlock from './TestBlock';
-import { TaskStore } from 'src/stores/Task';
 import { Select } from 'src/antd-extended/Select';
 
 const { Option } = Select;
@@ -93,13 +94,7 @@ interface Test {
 
 export type ChangeTests = (value: string, index: number, nameFile: 'input' | 'output') => void;
 
-function _Create() {
-    useEffect(() => {
-        (async () => {
-            await CreateStore.getLanguages();
-        })();
-    }, []);
-
+function _Create({ slug }: any) {
     const [description, setDescription] = useState(getLocalStorageValue(localStorageDescription));
 
     const [tests, setTests] = useState<Test[]>(getLocalStorageValue(localStorageTests, [{ input: '', output: '' }]));
@@ -110,13 +105,14 @@ function _Create() {
 
     const onSaveTask = useCallback(() => {
         (async () => {
-            const status = await CreateStore.saveTask({
+            const data = {
                 author: UserStore.user?.id,
                 name: getLocalStorageValue(localStorageName),
                 languages: getLocalStorageValue(localStorageLanguages),
                 description: getLocalStorageValue(localStorageDescription),
                 tests: getLocalStorageValue(localStorageTests),
-            });
+            };
+            const status = slug ? await CreateStore.editTask(data, slug) : await CreateStore.saveTask(data);
             if (status >= 200 && status < 300) {
                 TaskStore.list.load();
                 message.success('Задача сохранена!');
@@ -141,11 +137,18 @@ function _Create() {
         saveInLocalStorage(nameVariable, value);
     }, 300);
 
+    const changeName = useCallback(
+        (value) => {
+            setName(value);
+            debouncedSaveInLocalStorage.callback(localStorageName, value);
+        },
+        [setName],
+    );
+
     const onChangeName = useCallback(
         (e) => {
             const value = e.target.value;
-            setName(value);
-            debouncedSaveInLocalStorage.callback(localStorageName, value);
+            changeName(value);
         },
         [setName],
     );
@@ -163,16 +166,40 @@ function _Create() {
         debouncedSaveInLocalStorage.callback(localStorageLanguages, value);
     }, []);
 
+    const changeTests = useCallback((newTests) => {
+        setTests(newTests);
+        debouncedSaveInLocalStorage.callback(localStorageTests, newTests);
+    }, []);
+
     const onChangeTests: ChangeTests = useCallback(
         (value: string, index: number, nameFile: 'input' | 'output') => {
             const newTests = [...tests];
             newTests[index][nameFile] = value;
-
-            setTests(newTests);
-            debouncedSaveInLocalStorage.callback(localStorageTests, newTests);
+            changeTests(newTests);
         },
         [tests],
     );
+
+    useEffect(() => {
+        (async () => {
+            await CreateStore.getLanguages();
+        })();
+
+        console.log('slug1', slug);
+        if (slug) {
+            (async () => {
+                await TaskStore.getTask(slug);
+                console.log('TaskStore.task?.id ', TaskStore.task?.id, 'UserStore.user?.id', UserStore.user?.id);
+                console.log('description', TaskStore.task?.description);
+                if (TaskStore.task?.author.id === UserStore.user?.id) {
+                    TaskStore.task?.name && changeName(TaskStore.task.name);
+                    TaskStore.task?.description && onChangeDescription(TaskStore.task.description);
+                    TaskStore.task?.languages && onChangeLanguages(TaskStore.task.languages);
+                    TaskStore.task?.tests && changeTests(TaskStore.task.tests);
+                }
+            })();
+        }
+    }, []);
 
     const addTest = useCallback(() => {
         setTests([...tests, { input: '', output: '' }]);
@@ -196,10 +223,14 @@ function _Create() {
         [CreateStore.languages],
     );
 
+    if (TaskStore.task?.author.id !== UserStore.user?.id) {
+        return null;
+    }
+
     return (
         <div className={styles.createTask}>
             <div className={styles.container}>
-                <h1 className={styles.title}>Создание задачи</h1>
+                <h1 className={styles.title}>{slug ? 'Редактирование задачи' : 'Создание задачи'}</h1>
                 <p className={styles.description}>
                     Добавьте заголовок и описание задачи. Для красочности вы можете использовать разные цвета, добавлять
                     картинки, списки и код.
@@ -261,10 +292,10 @@ function _Create() {
                     <Button
                         type="primary"
                         onClick={onSaveTask}
-                        loading={CreateStore.saveProcess}
+                        loading={!slug && CreateStore.saveProcess}
                         icon={<SaveOutlined />}
                     >
-                        Сохранить задачу
+                        {slug ? 'Сохранить изменения' : 'Сохранить задачу'}
                     </Button>
                 </div>
             </div>
