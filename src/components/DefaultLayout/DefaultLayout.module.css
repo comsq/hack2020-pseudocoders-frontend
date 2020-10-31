@@ -1,7 +1,21 @@
+:global(.ant-layout) {
+    background-color: white;
+}
+
+:global(.ant-layout-header), :global(.ant-menu) {
+    background: #000d24 !important;
+}
+
 .content {
-    height: calc(100vh - 70px - 64px);
+    min-height: calc(100vh - 70px - 64px);
 }
 
 .footer {
     text-align: center;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 20px;
+    margin-left: -20px;
 }
