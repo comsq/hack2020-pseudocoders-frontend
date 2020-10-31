@@ -7,6 +7,7 @@ import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
 import { Create } from './Create';
 
 function _TeacherCreateTask() {
+    console.log('here');
     return (
         <WrapperUser>
             <TeacherPage path="tasks">
