@@ -4,6 +4,7 @@ import { navigate } from '@reach/router';
 
 import { User } from 'src/components/User/User';
 
+import logo from 'src/components/DefaultLayout/logo.png';
 import styles from 'src/components/DefaultLayout/DefaultLayout.module.css';
 
 const { Header, Content, Footer } = Layout;
@@ -24,8 +25,10 @@ export function DefaultLayout({ children, indexMenuItem, menuItems, setIndexMenu
     return (
         <Layout>
             <Header>
-                <div className="logo" />
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[`${indexMenuItem}`]}>
+                    <Menu.Item key="logo">
+                        <img alt="logo" className={styles.logo} src={logo} />
+                    </Menu.Item>
                     {menuItems.map((item, index) => (
                         <Menu.Item
                             key={`${index}`}

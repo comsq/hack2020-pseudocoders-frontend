@@ -6,6 +6,7 @@ export enum UserType {
     student = 'student',
     teacher = 'teacher',
 }
+
 export type IUser = {
     id: string;
     login: string;
@@ -14,6 +15,12 @@ export type IUser = {
     email: string;
     type: UserType;
 };
+
+export type IEditor = {
+    status: 'running' | 'exited';
+    port?: number;
+};
+
 function getApi() {
     return {
         async login({ login, password }: { login: string; password: string }) {
@@ -30,6 +37,7 @@ class UserStoreClass {
     api = getApi();
     checkLogin = false;
     user: IUser | null = null;
+    editor: IEditor | null = null;
 
     constructor() {
         makeAutoObservable(this);
