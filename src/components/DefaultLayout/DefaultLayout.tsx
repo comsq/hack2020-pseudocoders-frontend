@@ -4,7 +4,7 @@ import { navigate } from '@reach/router';
 
 import { User } from 'src/components/User/User';
 
-import logo from 'src/components/DefaultLayout/logo.png';
+import icon from 'src/components/DefaultLayout/icon.svg';
 import styles from 'src/components/DefaultLayout/DefaultLayout.module.css';
 import { WindowHelper } from 'src/helpers/WindowHelper';
 
@@ -27,8 +27,11 @@ export function DefaultLayout({ children, indexMenuItem, menuItems, setIndexMenu
         <Layout>
             <Header>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[`${indexMenuItem}`]}>
-                    <Menu.Item key="logo">
-                        <img alt="logo" className={styles.logo} src={logo} />
+                    <Menu.Item key="logo" className={styles.logoItem} onClick={() => navigate('/')}>
+                        <div className={styles.logoBlock}>
+                            <img alt="logo" className={styles.logoIcon} src={icon} />{' '}
+                            <p className={styles.logoText}>Pseudocoders</p>
+                        </div>
                     </Menu.Item>
                     {menuItems.map((item, index) => (
                         <Menu.Item
