@@ -172,11 +172,13 @@ function _GroupsPage() {
                         rules={[{ required: true, message: 'Выберите хотя бы одну задачу' }]}
                     >
                         <Select placeholder="Выберите задачи" mode="multiple">
-                            {TaskStore.list.data.map((task) => (
-                                <Option key={task.id} value={task.id}>
-                                    {task.name}
-                                </Option>
-                            ))}
+                            {TaskStore.list.data
+                                .filter((task) => task.author.id === UserStore.user?.id)
+                                .map((task) => (
+                                    <Option key={task.id} value={task.id}>
+                                        {task.name}
+                                    </Option>
+                                ))}
                         </Select>
                     </Form.Item>
                     <div className={styles.footer}>
