@@ -13,6 +13,7 @@ function _AppHeader() {
     return (
         <div className={styles.appHeader}>
             <Link to="/courses">Курсы</Link>
+            <Link to="/monitor">Результат выполнения</Link>
 
             <User />
         </div>

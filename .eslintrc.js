@@ -32,5 +32,7 @@ module.exports = {
         'unicorn/consistent-function-scoping': 'off',
         'unicorn/no-abusive-eslint-disable': 'off',
         'no-shadow': 'off',
+        camelcase: 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
     },
 };

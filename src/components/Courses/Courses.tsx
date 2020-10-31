@@ -3,6 +3,7 @@ import styles from 'src/components/Courses/Courses.module.css';
 import { CoursesStore } from 'src/stores/Courses';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
+import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 
 function _Courses() {
     useEffect(() => {
@@ -10,7 +11,7 @@ function _Courses() {
     }, []);
 
     if (CoursesStore.list.isLoading) {
-        return <>загрузка</>;
+        return <PageSpinner />;
     }
 
     if (CoursesStore.list.hasError) {
@@ -23,9 +24,7 @@ function _Courses() {
                 return (
                     <div key={index} className={styles.course}>
                         <div>{course.name}</div>
-                        <div className={styles.description}>
-                            {course.description}
-                        </div>
+                        <div className={styles.description}>{course.description}</div>
                     </div>
                 );
             })}

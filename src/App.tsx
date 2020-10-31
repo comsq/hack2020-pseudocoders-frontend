@@ -9,6 +9,7 @@ import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { IUser, UserStore } from 'src/stores/User';
 import { IndexPage } from 'src/components/IndexPage/IndexPage';
 import { NotFound } from 'src/components/NotFound/NotFound';
+import { MonitorPage } from 'src/components/MonitorPage/MonitorPage';
 
 function App() {
     useEffect(() => {
@@ -28,7 +29,8 @@ function App() {
             <Router className={styles.router}>
                 <IndexPage path="/" />
                 <Courses path="/courses" />
-                <Login path="login" />
+                <MonitorPage path="/monitor" />
+                <Login path="/login" />
                 <NotFound default />
             </Router>
         </div>
