@@ -1,12 +1,12 @@
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 import axios from 'axios';
-import { SimpleUser } from 'src/stores/User';
+import { SimpleUser, UserStore } from 'src/stores/User';
 import { ITask } from 'src/stores/Task';
 
 function getApi() {
     return {
-        async loadList(): Promise<MonitorData[]> {
-            const res = await axios.get<MonitorData[]>('api/task_checks/');
+        async loadList(userId: number): Promise<MonitorData[]> {
+            const res = await axios.get<MonitorData[]>(`api/users/${userId}/task_checks/`);
             return res.data.sort((md1, md2) => md2.date - md1.date);
         },
     };
@@ -39,7 +39,7 @@ export type MonitorData = {
 };
 class MonitorStoreClass {
     api = getApi();
-    list = new WithLoadingFlags<MonitorData[]>(this.api.loadList);
+    list = new WithLoadingFlags<MonitorData[]>(() => this.api.loadList(UserStore.user!.id));
 }
 
 export const MonitorStore = new MonitorStoreClass();
