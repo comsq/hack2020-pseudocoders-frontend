@@ -176,6 +176,12 @@ function _Create() {
         setTests([...tests, { input: '', output: '' }]);
     }, [setTests, tests]);
 
+    const removeTest = (idx: number) => {
+        return () => {
+            setTests(tests.filter((_, i) => i !== idx));
+        };
+    };
+
     const tagsLanguages = useMemo(
         () =>
             CreateStore.languages.map((language: Language) => (
@@ -241,7 +247,7 @@ function _Create() {
 
                 <h3 className={styles.paragraph}>Добавить тесты</h3>
                 {tests.map((item: Test, idx: number) => (
-                    <TestBlock key={idx} idx={idx} {...item} onChangeTests={onChangeTests} />
+                    <TestBlock key={idx} idx={idx} {...item} onChangeTests={onChangeTests} onDelete={removeTest(idx)} />
                 ))}
                 <Button className={styles.addButton} onClick={addTest} icon={<PlusOutlined />}>
                     Добавить тест
