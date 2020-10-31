@@ -54,6 +54,8 @@ export class WithLoadingFlags<Result = unknown> {
             return;
         }
 
+        this.isConsumerInitialized = true;
+
         await this.tick(this.loadWithSavingState.bind(this));
     }
 
@@ -66,6 +68,10 @@ export class WithLoadingFlags<Result = unknown> {
         await func();
 
         this.updateTimeoutId && window.clearTimeout(this.updateTimeoutId);
+
+        if (!this.isConsumerInitialized) {
+            return;
+        }
 
         this.updateTimeoutId = window.setTimeout(() => this.tick(func), this.interval);
     }
