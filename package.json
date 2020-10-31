@@ -6,11 +6,16 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint . --quiet"
+    "eslint": "eslint src --quiet"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.(js|jsx|ts|tsx)": [
-      "npm run eslint -- --fix",
+      "npm run eslint src -- --fix",
       "git add"
     ]
   },

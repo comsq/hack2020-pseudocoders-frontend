@@ -97,13 +97,8 @@ function _MonitorPage() {
                     testCount: `${passed_tests_count}/${tests_count}`,
                     status: (
                         <div className={styles.status}>
+                            <Progress type="circle" width={30} percent={percent} status={getStatusString(status)} />
                             <div className={styles[status]}>{status}</div>
-                            <Progress
-                                type="circle"
-                                width={30}
-                                percent={percent}
-                                status={getStatusString(percent, status)}
-                            />
                         </div>
                     ),
                 };
@@ -111,16 +106,15 @@ function _MonitorPage() {
         );
     }
 
-    function getStatusString(percent: number, status: TaskStatus) {
-        if (percent < 100 && status !== TaskStatus.running) {
-            return 'exception';
+    function getStatusString(status: TaskStatus) {
+        switch (status) {
+            case TaskStatus.ok:
+                return 'success';
+            case TaskStatus.running:
+                return 'active';
+            default:
+                return 'exception';
         }
-
-        if (percent === 100) {
-            return 'success';
-        }
-
-        return 'active';
     }
 
     function getColumnSearchProps(dataIndex: keyof RecordType) {

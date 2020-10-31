@@ -4,10 +4,16 @@
 
 .studentsAndTasks {
     display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.studentsAndTasks *:not(:last-child) {
-    margin-right: 40px;
+.studentsAndTasks > * {
+    padding: 0 40px;
+}
+
+.studentsAndTasks > *:not(:last-child) {
+    border-right: 1px solid #f0f0f0;
 }
 
 .subHeader {

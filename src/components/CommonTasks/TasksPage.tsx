@@ -64,7 +64,7 @@ function _TasksPage() {
             return {
                 title: verdict,
                 className: verdict,
-            }
+            };
         }
 
         return {
@@ -76,11 +76,10 @@ function _TasksPage() {
     function getDataSource() {
         return (tasks as ITask[]).map(({ author, languages, name, slug, verdict, id }) => {
             const prepareVerdict = calculateVerdict(verdict);
-            const nodeVerdict = user?.type === UserType.teacher ? undefined : (
-                <div className={styles[prepareVerdict.className]} >
-                    {prepareVerdict.title}
-                </div>
-            );
+            const nodeVerdict =
+                user?.type === UserType.teacher ? undefined : (
+                    <div className={styles[prepareVerdict.className]}>{prepareVerdict.title}</div>
+                );
 
             return {
                 author: UserUtils.getFullName(author),
@@ -171,19 +170,13 @@ function _TasksPage() {
     return (
         <div>
             {user?.type === UserType.teacher && (
-                <Button
-                    type="primary"
-                    onClick={() => navigate('/create')}
-                    className={styles.createButton}
-                >
+                <Button type="primary" onClick={() => navigate('/create')} className={styles.createButton}>
                     Создать задачу
                 </Button>
             )}
             <Table<RecordType>
                 locale={{
-                    emptyText: user?.type === UserType.teacher
-                        ? 'Вы не создали ни одной задачи'
-                        : 'Для вас нет задач',
+                    emptyText: user?.type === UserType.teacher ? 'Вы не создали ни одной задачи' : 'Для вас нет задач',
                 }}
                 dataSource={getDataSource()}
                 columns={getColumns()}
