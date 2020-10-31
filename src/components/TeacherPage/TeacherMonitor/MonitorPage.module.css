@@ -16,3 +16,28 @@
     background-color: #ffc069;
     padding: 0;
 }
+
+.status {
+    display: flex;
+    align-items: center;
+}
+
+.running {
+    color: blue;
+}
+
+.stopped,
+.ce,
+.re,
+.tle,
+.wa {
+    color: red;
+}
+
+.ok {
+    color: green;
+}
+
+.status > *:not(:last-child) {
+    margin-right: 10px;
+}

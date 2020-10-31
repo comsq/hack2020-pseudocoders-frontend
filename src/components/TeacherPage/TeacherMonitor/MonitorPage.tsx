@@ -2,8 +2,8 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from 'src/components/TeacherPage/TeacherMonitor/MonitorPage.module.css';
 import { observer } from 'mobx-react-lite';
-import { MonitorStore } from 'src/components/TeacherPage/TeacherMonitor/MonitorStore';
-import { Button, Input, Space, Table } from 'antd';
+import { MonitorStore, TaskStatus } from 'src/components/TeacherPage/TeacherMonitor/MonitorStore';
+import { Button, Input, Progress, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -16,7 +16,11 @@ function _MonitorPage() {
     const searchInput = useRef() as React.MutableRefObject<Input | null>;
 
     useEffect(() => {
-        MonitorStore.list.loadIfNotLoaded();
+        MonitorStore.list.addConsumer();
+
+        return () => {
+            MonitorStore.list.removeConsumer();
+        };
     }, []);
 
     if (MonitorStore.list.isLoading) {
@@ -24,7 +28,7 @@ function _MonitorPage() {
     }
 
     if (MonitorStore.list.hasError) {
-        return <>Монитор не доступен</>;
+        return <>Монитор недоступен</>;
     }
 
     function getStringSorter(key: keyof RecordType) {
@@ -40,15 +44,15 @@ function _MonitorPage() {
             },
             {
                 title: 'Ученик',
-                dataIndex: 'student_id',
-                sorter: getStringSorter('student_id'),
-                ...getColumnSearchProps('student_id'),
+                dataIndex: 'userName',
+                sorter: getStringSorter('userName'),
+                ...getColumnSearchProps('userName'),
             },
             {
                 title: 'Задача',
-                dataIndex: 'task_id',
-                sorter: getStringSorter('task_id'),
-                ...getColumnSearchProps('task_id'),
+                dataIndex: 'taskName',
+                sorter: getStringSorter('taskName'),
+                ...getColumnSearchProps('taskName'),
             },
             {
                 title: 'Язык',
@@ -70,20 +74,43 @@ function _MonitorPage() {
 
     function getDataSource() {
         return MonitorStore.list.data.map(
-            ({ date, student_id, task_id, language, id, passed_tests_count, test_count, status }) => {
+            ({ date, user, task, language, id, passed_tests_count, tests_count, status }) => {
                 const dateObj = new Date(date);
+                const percent = Math.round((passed_tests_count * 100) / tests_count);
                 return {
                     key: id,
                     dateObj,
                     date: `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`,
-                    student_id,
-                    task_id,
-                    language,
-                    testCount: `${passed_tests_count}/${test_count}`,
-                    status,
+                    userName: `${user.first_name} ${user.last_name}`,
+                    taskName: task.name,
+                    language: language.name,
+                    testCount: `${passed_tests_count}/${tests_count}`,
+                    status: (
+                        <div className={styles.status}>
+                            <div className={styles[status]}>{status}</div>
+                            <Progress
+                                type="circle"
+                                width={30}
+                                percent={percent}
+                                status={getStatusString(percent, status)}
+                            />
+                        </div>
+                    ),
                 };
             },
         );
+    }
+
+    function getStatusString(percent: number, status: TaskStatus) {
+        if (percent < 100 && status !== TaskStatus.running) {
+            return 'exception';
+        }
+
+        if (percent === 100) {
+            return 'success';
+        }
+
+        return 'active';
     }
 
     function getColumnSearchProps(dataIndex: keyof RecordType) {
