@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
 import { StudentPage } from 'src/components/StudentPage/StudentPage';
-import { UserStore, UserType } from 'src/stores/User';
+import { UserStore, UserType, UserUtils } from 'src/stores/User';
 import { ITask, TaskStore } from 'src/stores/Task';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import { ArrayHelper } from 'src/helpers/ArrayHelper';
@@ -92,7 +92,7 @@ function _TasksPage() {
                     );
 
                 return {
-                    author,
+                    author: UserUtils.getFullName(author),
                     name: (
                         <Link to={`/task/${slug}`}>
                             {name}
