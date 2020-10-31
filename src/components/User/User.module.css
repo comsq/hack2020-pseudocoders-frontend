@@ -8,3 +8,8 @@
 .user *:not(:last-child) {
     margin-right: 10px;
 }
+
+.editorButton {
+    width: 180px;
+    margin-left: 20px;
+}

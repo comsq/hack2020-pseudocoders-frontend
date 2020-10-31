@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import styles from 'src/components/Create/Create.module.css';
-import { CreateStore } from 'src/stores/Create';
+import { CreateStore, Language } from 'src/stores/Create';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
 import ReactQuill from 'react-quill';
@@ -67,6 +67,7 @@ const localStorageName = 'TASK_NAME';
 const localStorageDescription = 'TASK_DESCRIPTION';
 const localStorageLanguages = 'TASK_LANGUAGES';
 const localStorageTests = 'TASK_TESTS';
+const localStorageSave = 'IS_SAVE';
 
 const saveInLocalStorage = (name: string, value: string) => {
     localStorage.setItem(name, JSON.stringify(value));
@@ -81,12 +82,6 @@ const getLocalStorageValue = (nameLocalStorage: string, defaultValue: any = '') 
     return defaultValue;
 };
 
-const ALL_LANGUAGES = [
-    { name: 'C++', slug: 'cpp' },
-    { name: 'Pascal', slug: 'pascal' },
-    { name: 'Python', slug: 'python' },
-];
-
 interface Test {
     input?: string;
     output?: string;
@@ -96,8 +91,40 @@ export type ChangeTests = (value: string, index: number, nameFile: 'input' | 'ou
 
 function _Create() {
     useEffect(() => {
-        CreateStore.list.loadIfNotLoaded();
+        (async () => {
+            await CreateStore.getLanguages();
+        })();
     }, []);
+
+    const onSaveTask = useCallback(() => {
+        CreateStore.saveTask({
+            name: getLocalStorageValue(localStorageName),
+            languages: getLocalStorageValue(localStorageLanguages),
+            description: getLocalStorageValue(localStorageDescription),
+            tests: getLocalStorageValue(localStorageTests),
+        });
+        saveInLocalStorage(localStorageSave, 'on');
+    }, []);
+
+    useEffect(() => {
+        if (getLocalStorageValue(localStorageSave) === 'on') {
+            console.log('saveProcess', CreateStore.saveProcess, CreateStore.saveStatus);
+            if (!CreateStore.saveProcess && CreateStore.saveStatus === 200) {
+                const keys = [
+                    localStorageName,
+                    localStorageDescription,
+                    localStorageLanguages,
+                    localStorageTests,
+                    localStorageSave,
+                ];
+                keys.forEach((key) => {
+                    localStorage.removeItem(key);
+                });
+            } else {
+                console.log('error', CreateStore.saveStatus);
+            }
+        }
+    }, [CreateStore.saveProcess, CreateStore.saveStatus]);
 
     const [description, setDescription] = useState(getLocalStorageValue(localStorageDescription));
 
@@ -105,11 +132,11 @@ function _Create() {
 
     const [name, setName] = useState(getLocalStorageValue(localStorageName));
 
-    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, null));
+    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, []));
 
     const debouncedSaveInLocalStorage = useDebouncedCallback((nameVariable, value) => {
         saveInLocalStorage(nameVariable, value);
-    }, 1000);
+    }, 300);
 
     const onChangeName = useCallback(
         (e) => {
@@ -149,42 +176,46 @@ function _Create() {
         setTests([...tests, { input: '', output: '' }]);
     }, [setTests, tests]);
 
-    const saveTask = useCallback(() => {
-        console.log('save');
-    }, []);
+    const removeTest = (idx: number) => {
+        return () => {
+            setTests(tests.filter((_, i) => i !== idx));
+        };
+    };
 
     const tagsLanguages = useMemo(
         () =>
-            ALL_LANGUAGES.map((language) => (
+            CreateStore.languages.map((language: Language) => (
                 <Option value={language.slug} key={language.slug}>
                     {language.name}
                 </Option>
             )),
-        [],
+        [CreateStore.languages],
     );
 
     return (
-        <div className={styles.courses}>
+        <div className={styles.createTask}>
             <div className={styles.container}>
                 <h1 className={styles.title}>Создание задачи</h1>
                 <p className={styles.description}>
-                    Добавьте заголовок и описание задачи. Для красочности вы можете возможность использовать разные
-                    цвета, добавлять картинки, списки и код
+                    Добавьте заголовок и описание задачи. Для красочности вы можете использовать разные цвета, добавлять
+                    картинки, списки и код.
                 </p>
-                <div className={styles.languges}>
-                    <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
-                    <Select
-                        className={styles.selectLanguages}
-                        mode="tags"
-                        size="middle"
-                        placeholder="Please select"
-                        defaultValue={languages}
-                        onChange={onChangeLanguages}
-                        style={{ minWidth: '200px' }}
-                    >
-                        {tagsLanguages}
-                    </Select>
-                </div>
+                {CreateStore.languages.length && (
+                    <div className={styles.languges}>
+                        <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
+                        <Select
+                            className={styles.selectLanguages}
+                            mode="tags"
+                            size="middle"
+                            placeholder="Please select"
+                            defaultValue={languages}
+                            onChange={onChangeLanguages}
+                            style={{ minWidth: '200px' }}
+                        >
+                            {tagsLanguages}
+                        </Select>
+                    </div>
+                )}
                 <div style={{ marginBottom: 16 }}>
                     <Input
                         value={name}
@@ -216,13 +247,18 @@ function _Create() {
 
                 <h3 className={styles.paragraph}>Добавить тесты</h3>
                 {tests.map((item: Test, idx: number) => (
-                    <TestBlock key={idx} idx={idx} {...item} onChangeTests={onChangeTests} />
+                    <TestBlock key={idx} idx={idx} {...item} onChangeTests={onChangeTests} onDelete={removeTest(idx)} />
                 ))}
                 <Button className={styles.addButton} onClick={addTest} icon={<PlusOutlined />}>
                     Добавить тест
                 </Button>
                 <div className={styles.saveButtonBlock}>
-                    <Button type="primary" onClick={saveTask} icon={<SaveOutlined />}>
+                    <Button
+                        type="primary"
+                        // disabled={CreateStore.saveProcess}
+                        onClick={onSaveTask}
+                        icon={<SaveOutlined />}
+                    >
                         Сохранить задачу
                     </Button>
                 </div>

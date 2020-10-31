@@ -3,6 +3,10 @@ import { makeAutoObservable } from 'mobx';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 
+function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export enum UserType {
     student = 'student',
     teacher = 'teacher',
@@ -22,6 +26,7 @@ export type SimpleUser = Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'
 export type IEditor = {
     status: 'running' | 'exited';
     port?: number;
+    isLoading?: boolean;
 };
 
 function getApi() {
@@ -37,6 +42,36 @@ function getApi() {
             const res = await axios.get<IUser[]>('/api/users/');
 
             return res.data;
+        },
+
+        async editorStatus(userId: number) {
+            const res = await axios.get<IEditor>(`/tasks/editor/${userId}/status/`);
+
+            return res.data;
+        },
+
+        async startEditor(userId: number) {
+            await axios.post(`/tasks/editor/${userId}/start/`);
+
+            let res: IEditor = await this.editorStatus(userId);
+            while (res?.status !== 'running') {
+                await sleep(1000);
+                res = await this.editorStatus(userId);
+            }
+
+            return res;
+        },
+
+        async stopEditor(userId: number) {
+            await axios.post(`/tasks/editor/${userId}/stop/`);
+
+            let res: IEditor = await this.editorStatus(userId);
+            while (res?.status !== 'exited') {
+                await sleep(1000);
+                res = await this.editorStatus(userId);
+            }
+
+            return res;
         },
     };
 }
@@ -58,6 +93,10 @@ class UserStoreClass {
         LocalStorageSafe.setItem('user', this.user);
     }
 
+    setEditor(editor: IEditor | null) {
+        this.editor = editor;
+    }
+
     setCheckLogin() {
         this.checkLogin = true;
     }
@@ -65,6 +104,29 @@ class UserStoreClass {
     async login({ login, password }: { login: string; password: string }) {
         const user = await this.api.login({ login, password });
         this.setUser(user);
+    }
+
+    async editorStatus(userId: number) {
+        const editor = await this.api.editorStatus(userId);
+        this.setEditor(editor);
+    }
+
+    async startEditor(userId: number) {
+        if (this.editor) {
+            this.setEditor({ ...this.editor, isLoading: true });
+        }
+
+        const editor = await this.api.startEditor(userId);
+        this.setEditor(editor);
+    }
+
+    async stopEditor(userId: number) {
+        if (this.editor) {
+            this.setEditor({ ...this.editor, isLoading: true });
+        }
+
+        const editor = await this.api.stopEditor(userId);
+        this.setEditor(editor);
     }
 }
 
