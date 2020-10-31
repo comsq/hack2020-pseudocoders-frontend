@@ -10,7 +10,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import { UserStore, UserType, UserUtils } from 'src/stores/User';
 import { ArrayHelper } from 'src/helpers/ArrayHelper';
-import { TaskStore } from 'src/stores/Task';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 function _MonitorPage() {
@@ -20,18 +19,17 @@ function _MonitorPage() {
 
     useEffect(() => {
         MonitorStore.list.addConsumer();
-        TaskStore.list.loadWithSavingState();
 
         return () => {
             MonitorStore.list.removeConsumer();
         };
     }, []);
 
-    if (MonitorStore.list.isLoading || TaskStore.list.isLoading) {
+    if (MonitorStore.list.isLoading) {
         return <PageSpinner />;
     }
 
-    if (MonitorStore.list.hasError || TaskStore.list.hasError) {
+    if (MonitorStore.list.hasError) {
         return <>Монитор недоступен</>;
     }
 
@@ -85,15 +83,15 @@ function _MonitorPage() {
 
     function getDataSource() {
         return MonitorStore.list.data.map(
-            ({ date, user, task, language, id, passed_tests_count, tests_count, status }) => {
+            ({ date, user, task, task_author, language, id, passed_tests_count, tests_count, status }) => {
                 const dateObj = new Date(date);
                 const percent = Math.round((passed_tests_count * 100) / tests_count);
-                const taskInfo = TaskStore.list.data.find((t) => t.id === task.id)!;
+
                 return {
                     key: id,
                     dateObj,
                     date: `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`,
-                    userName: UserUtils.getFullName(UserStore.user?.type === UserType.teacher ? user : taskInfo.author),
+                    userName: UserUtils.getFullName(UserStore.user?.type === UserType.teacher ? user : task_author),
                     taskName: task.name,
                     language: language.name,
                     testCount: `${passed_tests_count}/${tests_count}`,

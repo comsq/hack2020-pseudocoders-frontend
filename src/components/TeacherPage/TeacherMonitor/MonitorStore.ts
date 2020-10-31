@@ -34,6 +34,7 @@ export type MonitorData = {
     passed_tests_count: number;
     status: TaskStatus;
     task: SimpleTask;
+    task_author: SimpleUser;
     tests_count: number;
     user: SimpleUser;
 };
