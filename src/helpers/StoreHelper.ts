@@ -43,9 +43,9 @@ export class WithLoadingFlags<Result = unknown> {
         }
     }
 
-    loadIfNotLoaded() {
+    async loadIfNotLoaded() {
         if (!this.isLoaded) {
-            this.load();
+            await this.load();
         }
     }
 

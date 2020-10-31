@@ -25,7 +25,7 @@ type Language = {
     name: string;
     slug: string;
 };
-type Task = {
+export type Task = {
     id: number;
     name: string;
     slug: string;
