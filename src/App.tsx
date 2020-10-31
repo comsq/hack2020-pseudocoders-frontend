@@ -31,6 +31,7 @@ function _App() {
             <Router className={styles.router}>
                 {UserStore.user?.type === UserType.teacher && (
                     <>
+                        <TeacherCreateTask path="/task/:slug/edit" />
                         <TeacherCreateTask path="/create" />
                         <TeacherStudents path="/students" />
                     </>

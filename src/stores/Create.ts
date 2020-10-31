@@ -19,6 +19,11 @@ function getApi() {
             const response = await axios.post(`/api/tasks/create/`, { ...data, slug: slugify(data.name) });
             return response.status;
         },
+
+        async editTask(data: any, slug: string) {
+            const response = await axios.put(`/api/tasks/update/${slug}/`, data);
+            return response.status;
+        },
     };
 }
 
@@ -35,8 +40,6 @@ class CreateStoreClass {
     reset() {
         this.api = getApi();
         this.languages = [];
-        this.saveProcess = false;
-        this.saveStatus = 0;
     }
 
     setLanguages(languages: any) {
@@ -57,6 +60,12 @@ class CreateStoreClass {
         this.saveStatus = status;
         this.saveProcess = false;
 
+        return status;
+    }
+
+    async editTask(data: any, slug: string) {
+        // eslint-disable-next-line sonarjs/prefer-immediate-return
+        const status = await this.api.editTask(data, slug);
         return status;
     }
 }

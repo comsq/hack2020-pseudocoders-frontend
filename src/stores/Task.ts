@@ -67,8 +67,8 @@ class TaskStoreClass {
         this.list = new WithLoadingFlags<ITask[]>(this.api.loadList);
     }
 
-    async getTask(id: string) {
-        const task = await this.api.loadTask(id);
+    async getTask(slug: string) {
+        const task = await this.api.loadTask(slug);
         this.task = task;
     }
 

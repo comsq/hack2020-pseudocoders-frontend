@@ -55,6 +55,8 @@ function _TaskPage({ slug }: any) {
         ));
     }
 
+    const isEditorRunning = UserStore.editor?.status === 'running';
+
     return (
         <Component path="tasks">
             {TaskStore.task ? (
@@ -113,7 +115,9 @@ function _TaskPage({ slug }: any) {
                                     <Button
                                         className={styles.chekTaskButton}
                                         onClick={handleSendTask}
-                                        disabled={!UserStore.user?.id || !lang || !TaskStore.task.id}
+                                        disabled={
+                                            !UserStore.user?.id || !lang || !TaskStore.task.id || !isEditorRunning
+                                        }
                                         type="primary"
                                     >
                                         Сдать задачу
@@ -134,7 +138,7 @@ function _TaskPage({ slug }: any) {
                                 </Button>
                             </>
                         ) : (
-                            <Button href={`task/${slug}/edit`} type="primary">
+                            <Button href={`/task/${slug}/edit`} type="primary">
                                 Редактировать задачу
                             </Button>
                         )}
