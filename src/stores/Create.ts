@@ -53,6 +53,8 @@ class CreateStoreClass {
         const status = await this.api.saveTask(data);
         this.saveProcess = false;
         this.saveStatus = status;
+
+        return status;
     }
 }
 
