@@ -17,6 +17,40 @@
     padding: 0;
 }
 
+.running {
+    color: blue;
+}
+
+.stopped,
+.ce,
+.re,
+.tle,
+.wa {
+    color: red;
+}
+
+.ok {
+    color: green;
+}
+
+.no-solution {
+    color: #999;
+}
+
+.stopped,
+.running,
+.ce,
+.re,
+.tle,
+.wa,
+.ok {
+    width: 60px;
+}
+
+.status > *:not(:last-child) {
+    margin-right: 10px;
+}
+
 .createButton {
     margin: 20px 16px;
 }
