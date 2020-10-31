@@ -42,7 +42,16 @@
     color: green;
 }
 
+.stopped,
+.running,
+.ce,
+.re,
+.tle,
+.wa,
+.ok {
+    width: 60px;
+}
+
 .status > *:not(:last-child) {
-    margin-top: 20px;
     margin-right: 10px;
 }

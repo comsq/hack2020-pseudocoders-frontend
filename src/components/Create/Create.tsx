@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import styles from 'src/components/Create/Create.module.css';
-import { CreateStore, Language } from 'src/stores/Create';
+import { CreateStore, ILanguage } from 'src/stores/Create';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from '@reach/router';
 import ReactQuill from 'react-quill';
@@ -108,7 +108,6 @@ function _Create() {
 
     useEffect(() => {
         if (getLocalStorageValue(localStorageSave) === 'on') {
-            console.log('saveProcess', CreateStore.saveProcess, CreateStore.saveStatus);
             if (!CreateStore.saveProcess && CreateStore.saveStatus === 200) {
                 const keys = [
                     localStorageName,
@@ -163,7 +162,6 @@ function _Create() {
     const onChangeTests: ChangeTests = useCallback(
         (value: string, index: number, nameFile: 'input' | 'output') => {
             const newTests = [...tests];
-            console.log(index, newTests);
             newTests[index][nameFile] = value;
 
             setTests(newTests);
@@ -178,13 +176,15 @@ function _Create() {
 
     const removeTest = (idx: number) => {
         return () => {
-            setTests(tests.filter((_, i) => i !== idx));
+            const newTests = tests.filter((_, i) => i !== idx);
+            setTests(newTests);
+            debouncedSaveInLocalStorage.callback(localStorageTests, newTests);
         };
     };
 
     const tagsLanguages = useMemo(
         () =>
-            CreateStore.languages.map((language: Language) => (
+            CreateStore.languages.map((language: ILanguage) => (
                 <Option value={language.slug} key={language.slug}>
                     {language.name}
                 </Option>
@@ -200,7 +200,7 @@ function _Create() {
                     Добавьте заголовок и описание задачи. Для красочности вы можете использовать разные цвета, добавлять
                     картинки, списки и код.
                 </p>
-                {CreateStore.languages.length && (
+                {
                     <div className={styles.languges}>
                         <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
                         <Select
@@ -215,7 +215,7 @@ function _Create() {
                             {tagsLanguages}
                         </Select>
                     </div>
-                )}
+                }
                 <div style={{ marginBottom: 16 }}>
                     <Input
                         value={name}
