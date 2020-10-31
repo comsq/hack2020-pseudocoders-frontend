@@ -72,7 +72,6 @@ function _MonitorPage() {
             {
                 title: 'Результат',
                 dataIndex: 'status',
-                sorter: getStringSorter('status'),
             },
             {
                 title: 'Количество пройденных тестов',
