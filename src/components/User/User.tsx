@@ -20,7 +20,7 @@ function _User() {
         if (user) {
             UserStore.editorStatus(user.id);
         }
-    }, []);
+    }, [user]);
 
     function onLogOut() {
         [UserStore, CreateStore, TaskStore, MonitorStore, GroupStore].forEach((store) => store.reset());
