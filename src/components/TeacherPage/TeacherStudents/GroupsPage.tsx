@@ -58,13 +58,15 @@ function _GroupsPage() {
     }
 
     function renderDropdownGroups() {
-        const options = GroupStore.list.data.map((group) => {
-            return (
-                <Option key={group.id} value={group.id}>
-                    {group.name}
-                </Option>
-            );
-        });
+        const options = GroupStore.list.data
+            .filter((group) => group.owner === UserStore.user?.id)
+            .map((group) => {
+                return (
+                    <Option key={group.id} value={group.id}>
+                        {group.name}
+                    </Option>
+                );
+            });
         return (
             <Form.Item label="Группа учеников">
                 <Select value={currentGroup?.id} style={{ width: 300 }} onChange={handleChange}>
