@@ -14,7 +14,7 @@ import { CommonMonitor } from 'src/components/CommonMonitor/CommonMonitor';
 import { Task } from 'src/components/Task/Task';
 import { CommonTasks } from 'src/components/CommonTasks/CommonTasks';
 
-function _App(props: any) {
+function _App() {
     useEffect(() => {
         const user = LocalStorageSafe.getItem<IUser>('user');
         if (!user) {

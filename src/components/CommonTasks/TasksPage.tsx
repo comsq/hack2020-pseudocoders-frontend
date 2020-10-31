@@ -5,8 +5,6 @@ import { ColumnsType } from 'antd/lib/table';
 import { Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
-import { StudentPage } from 'src/components/StudentPage/StudentPage';
 import { UserStore, UserType, UserUtils } from 'src/stores/User';
 import { ITask, TaskStore } from 'src/stores/Task';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
@@ -24,10 +22,7 @@ function _TasksPage() {
         })();
     }, [user]);
 
-    const role = UserStore.user?.type;
-    const Component = role === UserType.teacher ? TeacherPage : StudentPage;
-
-    const tasks =  TaskStore.listUser;
+    const tasks = TaskStore.listUser;
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchColumn] = useState<keyof RecordType | ''>('');
@@ -43,31 +38,25 @@ function _TasksPage() {
                 title: 'Задача',
                 dataIndex: 'name',
             },
-            UserStore.user?.type === UserType.student && (
-                {
-                    title: 'Автор задачи',
-                    dataIndex: 'author',
-                    sorter: getStringSorter('author'),
-                    ...getColumnSearchProps('author'),
-                }
-            ),
+            UserStore.user?.type === UserType.student && {
+                title: 'Автор задачи',
+                dataIndex: 'author',
+                sorter: getStringSorter('author'),
+                ...getColumnSearchProps('author'),
+            },
             {
                 title: 'Языки',
                 dataIndex: 'languages',
                 sorter: getStringSorter('languages'),
                 ...getColumnSearchProps('languages'),
             },
-            UserStore.user?.type === UserType.student && (
-                {
-                    title: 'Вердикт',
-                    dataIndex: 'verdict',
-                    sorter: getStringSorter('verdict'),
-                    ...getColumnSearchProps('verdict'),
-                }
-            ),
-            
-        ]
-            .filter(Boolean);
+            UserStore.user?.type === UserType.student && {
+                title: 'Вердикт',
+                dataIndex: 'verdict',
+                sorter: getStringSorter('verdict'),
+                ...getColumnSearchProps('verdict'),
+            },
+        ].filter(Boolean);
 
         return ArrayHelper.clearNullable(array);
     }
@@ -81,28 +70,16 @@ function _TasksPage() {
     }
 
     function getDataSource() {
-        return (tasks as ITask[]).map(
-            ({ author, languages, name, slug, verdict, }) => {
-                const prepareVerdict = user?.type === UserType.teacher
-                    ? undefined
-                    : (
-                        <div>
-                            {calculateVerdict(verdict)}
-                        </div>
-                    );
+        return (tasks as ITask[]).map(({ author, languages, name, slug, verdict }) => {
+            const prepareVerdict = user?.type === UserType.teacher ? undefined : <div>{calculateVerdict(verdict)}</div>;
 
-                return {
-                    author: UserUtils.getFullName(author),
-                    name: (
-                        <Link to={`/task/${slug}`}>
-                            {name}
-                        </Link>
-                    ),
-                    languages: languages.map(language => language.name).join(' '),
-                    verdict: prepareVerdict,
-                };
-            },
-        );
+            return {
+                author: UserUtils.getFullName(author),
+                name: <Link to={`/task/${slug}`}>{name}</Link>,
+                languages: languages.map((language) => language.name).join(' '),
+                verdict: prepareVerdict,
+            };
+        });
     }
 
     function getColumnSearchProps(dataIndex: keyof RecordType) {
@@ -178,9 +155,7 @@ function _TasksPage() {
     type RecordType = ReturnType<typeof getDataSource>[number];
 
     if (!tasks) {
-        return (
-            <PageSpinner />
-        )
+        return <PageSpinner />;
     }
 
     return (
@@ -193,7 +168,7 @@ function _TasksPage() {
                 columns={getColumns()}
             />
         </div>
-    )
+    );
 }
 
 export const TasksPage = observer<RouteComponentProps>(_TasksPage);

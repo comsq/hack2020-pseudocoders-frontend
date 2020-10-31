@@ -64,6 +64,7 @@ class TaskStoreClass {
         const task = await this.api.loadTask(id);
         this.task = task;
     }
+
     async getListByUser(user_id: number) {
         const listUser = await this.api.loadListByUser(user_id);
         this.listUser = listUser;
