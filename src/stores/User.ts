@@ -26,8 +26,12 @@ type IUserFromApi = {
     first_name: string;
     last_name: string;
     email: string;
-    user_type: UserType;
-};
+} & (
+    | {
+          user_type: UserType;
+      }
+    | { type: UserType }
+);
 
 export type SimpleUser = Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'>;
 
@@ -38,7 +42,7 @@ export type IEditor = {
 };
 
 function deserializeUser(user: IUserFromApi): IUser {
-    const type = user.user_type;
+    const type = ('user_type' in user && user.user_type) || (('type' in user && user.type) as UserType);
     return {
         ...user,
         isTeacher: type === UserType.teacher,
