@@ -1,40 +1,17 @@
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
-import { AsyncHelper } from 'src/helpers/AsyncHelper';
+import axios from 'axios';
+import { IUser } from 'src/stores/User';
 
 function getApi() {
     return {
         async loadList(): Promise<MonitorData[]> {
-            await AsyncHelper.delay(1000);
-            return [
-                {
-                    student_id: 2,
-                    task_id: '2',
-                    status: TaskStatus.ok,
-                    id: '1',
-                    passed_tests_count: 10,
-                    test_count: 10,
-                    date: 1604090908,
-                    language: 'Python 3',
-                },
-                {
-                    student_id: 1,
-                    task_id: '2',
-                    status: TaskStatus.wa,
-                    id: '2',
-                    passed_tests_count: 0,
-                    test_count: 10,
-                    date: 1604090808,
-                    language: 'C++',
-                },
-            ].map((monitorData) => ({
-                ...monitorData,
-                date: monitorData.date * 1000,
-            }));
+            const res = await axios.get<MonitorData[]>('api/task_checks/');
+            return res.data.sort((md1, md2) => md2.date - md1.date);
         },
     };
 }
 
-enum TaskStatus {
+export enum TaskStatus {
     running = 'running',
     stopped = 'stopped',
     ce = 'ce',
@@ -43,15 +20,25 @@ enum TaskStatus {
     wa = 'wa',
     ok = 'ok',
 }
+type Language = {
+    id: number;
+    name: string;
+    slug: string;
+};
+type Task = {
+    id: number;
+    name: string;
+    slug: string;
+};
 export type MonitorData = {
-    id: string;
-    student_id: number;
-    task_id: string;
-    status: TaskStatus;
-    test_count: number;
-    passed_tests_count: number;
-    language: string;
     date: number;
+    id: number;
+    language: Language;
+    passed_tests_count: number;
+    status: TaskStatus;
+    task: Task;
+    tests_count: number;
+    user: Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'>;
 };
 class MonitorStoreClass {
     api = getApi();
