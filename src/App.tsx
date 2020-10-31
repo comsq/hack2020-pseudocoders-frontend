@@ -8,6 +8,7 @@ import { Login } from 'src/components/Login/Login';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { IUser, UserStore, UserType } from 'src/stores/User';
 import { NotFound } from 'src/components/NotFound/NotFound';
+import { TeacherCreateTask } from 'src/components/Create';
 import { TeacherTasks } from 'src/components/TeacherPage/TeacherTasks/TeacherTasks';
 import { TeacherStudents } from 'src/components/TeacherPage/TeacherStudents/TeacherStudents';
 import { TeacherMonitor } from 'src/components/TeacherPage/TeacherMonitor/TeacherMonitor';
@@ -31,6 +32,7 @@ function _App() {
             <Router className={styles.router}>
                 {UserStore.user?.type === UserType.teacher && (
                     <>
+                        <TeacherCreateTask path="create" />
                         <TeacherTasks path="tasks" />
                         <TeacherStudents path="students" />
                         <TeacherMonitor path="monitoring" />
