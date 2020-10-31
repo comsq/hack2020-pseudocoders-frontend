@@ -27,6 +27,7 @@ function _TaskPage({ slug }: any) {
         (async () => {
             // @ts-ignore;
             await TaskStore.sendTask(UserStore.user?.id, TaskStore.task.id, lang);
+            window.location.pathname = '/monitoring';
         })();
     }, [lang, UserStore.user, TaskStore.task]);
 
@@ -103,7 +104,6 @@ function _TaskPage({ slug }: any) {
                             <>
                                 <div>
                                     <Button
-                                        href="/monitoring"
                                         onClick={handleSendTask}
                                         disabled={!UserStore.user?.id || !lang || !TaskStore.task.id}
                                         type="primary"
