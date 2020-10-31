@@ -163,7 +163,7 @@ function _TasksPage() {
 
     type RecordType = ReturnType<typeof getDataSource>[number];
 
-    if (!tasks) {
+    if (!tasks || TaskStore.list.isLoading) {
         return <PageSpinner />;
     }
 

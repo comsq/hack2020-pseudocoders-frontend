@@ -47,6 +47,14 @@ function _TaskPage({ slug }: any) {
         [TaskStore.task],
     );
 
+    function getFormattedInput(input: string) {
+        return input.split('\n').map((line: string, index: number) => (
+            <div className={styles.line} key={index}>
+                {line.replace(/\s/g, '\u00A0')}
+            </div>
+        ));
+    }
+
     return (
         <Component path="tasks">
             {TaskStore.task ? (
@@ -79,27 +87,23 @@ function _TaskPage({ slug }: any) {
                     {TaskStore.task.tests && (
                         <>
                             <p className={styles.paragraph}>ПРИМЕРЫ ТЕСТОВ:</p>
-                            {TaskStore.task.tests.map(({ input, output }, idx) => (
-                                <React.Fragment key={idx}>
-                                    <p className={styles.testName}>Test {idx + 1}</p>
-                                    <div className={styles.test}>
-                                        <div className={styles.file}>
-                                            <p className={styles.fileTitle}>input.txt</p>
-                                            <div
-                                                className={styles.fileContent}
-                                                dangerouslySetInnerHTML={{ __html: input }}
-                                            />
+                            {TaskStore.task.tests.map(({ input, output }, idx) => {
+                                return (
+                                    <React.Fragment key={idx}>
+                                        <p className={styles.testName}>Test {idx + 1}</p>
+                                        <div className={styles.test}>
+                                            <div className={styles.file}>
+                                                <p className={styles.fileTitle}>input.txt</p>
+                                                <div className={styles.fileContent}>{getFormattedInput(input)}</div>
+                                            </div>
+                                            <div className={styles.file}>
+                                                <p className={styles.fileTitle}>output.txt</p>
+                                                <div className={styles.fileContent}>{getFormattedInput(output)}</div>
+                                            </div>
                                         </div>
-                                        <div className={styles.file}>
-                                            <p className={styles.fileTitle}>output.txt</p>
-                                            <div
-                                                className={styles.fileContent}
-                                                dangerouslySetInnerHTML={{ __html: output }}
-                                            />
-                                        </div>
-                                    </div>
-                                </React.Fragment>
-                            ))}
+                                    </React.Fragment>
+                                );
+                            })}
                         </>
                     )}
                     <div className={styles.buttonBlock}>
