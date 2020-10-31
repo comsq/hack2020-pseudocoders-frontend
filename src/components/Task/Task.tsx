@@ -47,6 +47,14 @@ function _TaskPage({ slug }: any) {
         [TaskStore.task],
     );
 
+    function getFormattedInput(input: string) {
+        return input.split('\n').map((line: string, index: number) => (
+            <div className={styles.line} key={index}>
+                {line.replace(/\s/g, '\u00A0')}
+            </div>
+        ));
+    }
+
     return (
         <Component path="tasks">
             {TaskStore.task ? (
@@ -86,14 +94,11 @@ function _TaskPage({ slug }: any) {
                                         <div className={styles.test}>
                                             <div className={styles.file}>
                                                 <p className={styles.fileTitle}>input.txt</p>
-                                                <div
-                                                    className={styles.fileContent}
-                                                    dangerouslySetInnerHTML={{ __html: input }}
-                                                />
+                                                <div className={styles.fileContent}>{getFormattedInput(input)}</div>
                                             </div>
                                             <div className={styles.file}>
                                                 <p className={styles.fileTitle}>output.txt</p>
-                                                <div className={styles.fileContent}>{output}</div>
+                                                <div className={styles.fileContent}>{getFormattedInput(output)}</div>
                                             </div>
                                         </div>
                                     </React.Fragment>
