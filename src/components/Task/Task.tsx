@@ -115,9 +115,7 @@ function _TaskPage({ slug }: any) {
                                     <Button
                                         className={styles.chekTaskButton}
                                         onClick={handleSendTask}
-                                        disabled={
-                                            !UserStore.user?.id || !lang || !TaskStore.task.id || !isEditorRunning
-                                        }
+                                        disabled={!UserStore.user?.id || !lang || !TaskStore.task.id}
                                         type="primary"
                                     >
                                         Сдать задачу
@@ -128,7 +126,7 @@ function _TaskPage({ slug }: any) {
                                 </div>
                                 <Button
                                     className={styles.buttonEditor}
-                                    disabled={!(port && login)}
+                                    disabled={!(port && login) || !isEditorRunning}
                                     href={`http://api.pseudocoders.online:${port}/?folder=/home/coder/project/${slug}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
