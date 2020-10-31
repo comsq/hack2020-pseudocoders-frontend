@@ -35,11 +35,11 @@ function _App() {
                         <TeacherStudents path="/students" />
                     </>
                 )}
-                <CommonMonitor path="monitoring" />
+                <CommonMonitor path="/monitoring" />
                 <CommonTasks path="/" />
-                <CommonTasks path="tasks" />
-                <Login path="login" />
-                <Task path="task/:slug" />
+                <CommonTasks path="/tasks" />
+                <Login path="/login" />
+                <Task path="/task/:slug" />
                 <NotFound default />
             </Router>
         </div>

@@ -15,15 +15,15 @@ function _TeacherPage({ path, children }: ITeacherPage) {
         return ArrayHelper.clearNullable([
             {
                 title: 'Задачи',
-                path: '/tasks',
+                path: 'tasks',
             },
             UserStore.user?.type === UserType.teacher && {
                 title: 'Ученики',
-                path: '/students',
+                path: 'students',
             },
             {
                 title: 'Монитор',
-                path: '/monitoring',
+                path: 'monitoring',
             },
             UserStore.editor?.status === 'running' && {
                 title: 'Редактор',
@@ -33,7 +33,7 @@ function _TeacherPage({ path, children }: ITeacherPage) {
     }
 
     const menuItems = getMenuItems();
-    const startIndexMenuItem = menuItems.findIndex((item) => item.path.replace('/', '') === path);
+    const startIndexMenuItem = menuItems.findIndex((item) => item.path === path);
 
     if (startIndexMenuItem === -1) {
         throw new Error('invalid path');

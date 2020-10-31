@@ -1,5 +1,4 @@
 import { TeacherPage } from 'src/components/TeacherPage/TeacherPage';
-import { StudentPage } from 'src/components/StudentPage/StudentPage';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
 import styles from 'src/components/Task/Task.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -32,7 +31,7 @@ function _TaskPage({ slug }: any) {
     }, [lang, UserStore.user, TaskStore.task]);
 
     const role = UserStore.user?.type;
-    const Component = role === UserType.teacher ? TeacherPage : StudentPage;
+    const Component = TeacherPage;
 
     const tagsLanguages = useMemo(
         () =>
