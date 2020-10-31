@@ -1,7 +1,7 @@
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 import axios from 'axios';
 import { SimpleUser, UserStore } from 'src/stores/User';
-import { ITask } from 'src/stores/Task';
+import { SimpleTask } from 'src/stores/Task';
 
 function getApi() {
     return {
@@ -33,7 +33,7 @@ export type MonitorData = {
     language: Language;
     passed_tests_count: number;
     status: TaskStatus;
-    task: ITask;
+    task: SimpleTask;
     tests_count: number;
     user: SimpleUser;
 };
