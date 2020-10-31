@@ -5,14 +5,15 @@ import { UserStore } from 'src/stores/User';
 import { observer } from 'mobx-react-lite';
 import { navigate, RouteComponentProps } from '@reach/router';
 import ReactQuill from 'react-quill';
-import { Select } from 'src/antd-extended/Select';
 import { Input, Button, message } from 'antd';
+
 import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
 import { useDebouncedCallback } from 'use-debounce';
 
 import TestBlock from './TestBlock';
 import { TaskStore } from 'src/stores/Task';
+import { Select } from 'src/antd-extended/Select';
 
 const { Option } = Select;
 
@@ -208,7 +209,7 @@ function _Create() {
                         <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
                         <Select
                             className={styles.selectLanguages}
-                            mode="tags"
+                            mode="multiple"
                             size="middle"
                             placeholder="Please select"
                             defaultValue={languages}
