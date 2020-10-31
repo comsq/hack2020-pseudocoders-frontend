@@ -73,12 +73,8 @@ function _TasksPage() {
     }
 
     function calculateVerdict(verdict: any) {
-        if (verdict === true) {
-            return 'accepted';
-        }
-
-        if (verdict === false) {
-            return 'wrong solutuin';
+        if (verdict) {
+            return verdict;
         }
 
         return 'no solution';
