@@ -7,8 +7,26 @@
     background: #000d24 !important;
 }
 
-:global(.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover) {
-    background-color: inherit;
+.logoBlock {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    height: 65px;
+}
+
+.logoText {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0 20px 0 10px;
+}
+
+.logoIcon {
+    height: 45px;
+}
+:global(.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover),
+:global(.ant-menu.ant-menu-dark .ant-menu-item-selected) {
+    background-color: #6f9bc787;
 }
 
 .content {

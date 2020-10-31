@@ -71,6 +71,7 @@
 .buttonBlock {
     justify-content: flex-end;
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
@@ -80,6 +81,24 @@
 
 .selectLang {
     min-width: 100px;
+}
+
+.selectLang :global(.ant-select-selector) {
+    border-left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.chekTaskButton {
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.selectCheckTask {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 @media (min-width: 780px) {
