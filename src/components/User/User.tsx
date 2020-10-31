@@ -4,6 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { UserStore } from 'src/stores/User';
 import { Button } from 'antd';
 import { navigate } from '@reach/router';
+import { CreateStore } from 'src/stores/Create';
+import { TaskStore } from 'src/stores/Task';
+import { MonitorStore } from 'src/components/CommonMonitor/MonitorStore';
+import { GroupStore } from 'src/components/TeacherPage/TeacherStudents/GroupStore';
 
 function _User() {
     const user = UserStore.user;
@@ -19,7 +23,8 @@ function _User() {
     }, []);
 
     function onLogOut() {
-        UserStore.setUser(null);
+        [UserStore, CreateStore, TaskStore, MonitorStore, GroupStore].forEach((store) => store.reset());
+        localStorage.clear();
         navigate('/');
     }
 

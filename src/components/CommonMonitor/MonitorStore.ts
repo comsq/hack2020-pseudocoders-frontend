@@ -41,6 +41,11 @@ export type MonitorData = {
 class MonitorStoreClass {
     api = getApi();
     list = new WithLoadingFlags<MonitorData[]>(() => this.api.loadList(UserStore.user!.id));
+
+    reset() {
+        this.api = getApi();
+        this.list = new WithLoadingFlags<MonitorData[]>(() => this.api.loadList(UserStore.user!.id));
+    }
 }
 
 export const MonitorStore = new MonitorStoreClass();

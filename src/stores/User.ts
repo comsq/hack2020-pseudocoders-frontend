@@ -85,6 +85,14 @@ class UserStoreClass {
         makeAutoObservable(this);
     }
 
+    reset() {
+        this.api = getApi();
+        this.checkLogin = false;
+        this.user = null;
+        this.editor = null;
+        this.list = new WithLoadingFlags<IUser[]>(this.api.loadList);
+    }
+
     setUser(user: IUser | null) {
         this.user = user;
         LocalStorageSafe.setItem('user', this.user);

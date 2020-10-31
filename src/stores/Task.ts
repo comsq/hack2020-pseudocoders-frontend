@@ -60,6 +60,13 @@ class TaskStoreClass {
         makeAutoObservable(this);
     }
 
+    reset() {
+        this.api = getApi();
+        this.task = null;
+        this.listUser = null;
+        this.list = new WithLoadingFlags<ITask[]>(this.api.loadList);
+    }
+
     async getTask(id: string) {
         const task = await this.api.loadTask(id);
         this.task = task;

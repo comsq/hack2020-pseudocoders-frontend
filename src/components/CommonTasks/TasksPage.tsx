@@ -70,7 +70,7 @@ function _TasksPage() {
     }
 
     function getDataSource() {
-        return (tasks as ITask[]).map(({ author, languages, name, slug, verdict }) => {
+        return (tasks as ITask[]).map(({ author, languages, name, slug, verdict, id }) => {
             const prepareVerdict = user?.type === UserType.teacher ? undefined : <div>{calculateVerdict(verdict)}</div>;
 
             return {
@@ -78,6 +78,7 @@ function _TasksPage() {
                 name: <Link to={`/task/${slug}`}>{name}</Link>,
                 languages: languages.map((language) => language.name).join(' '),
                 verdict: prepareVerdict,
+                key: id,
             };
         });
     }
