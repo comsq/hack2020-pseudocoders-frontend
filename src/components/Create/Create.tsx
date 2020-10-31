@@ -253,12 +253,7 @@ function _Create() {
                     Добавить тест
                 </Button>
                 <div className={styles.saveButtonBlock}>
-                    <Button
-                        type="primary"
-                        // disabled={CreateStore.saveProcess}
-                        onClick={onSaveTask}
-                        icon={<SaveOutlined />}
-                    >
+                    <Button type="primary" onClick={onSaveTask} icon={<SaveOutlined />}>
                         Сохранить задачу
                     </Button>
                 </div>

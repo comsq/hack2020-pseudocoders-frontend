@@ -9,16 +9,16 @@ interface IStudentPage {
 const menuItems = [
     {
         title: 'Задачи',
-        path: 'tasks',
+        path: '/tasks',
     },
     {
         title: 'Монитор',
-        path: 'monitoring',
+        path: '/monitoring',
     },
 ];
 
 export function StudentPage({ path, children }: IStudentPage) {
-    const startIndexMenuItem = menuItems.findIndex((item) => item.path === path);
+    const startIndexMenuItem = menuItems.findIndex((item) => item.path.replace('/', '') === path);
 
     if (startIndexMenuItem === -1) {
         throw new Error('invalid path');

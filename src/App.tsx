@@ -14,7 +14,7 @@ import { CommonMonitor } from 'src/components/CommonMonitor/CommonMonitor';
 import { Task } from 'src/components/Task/Task';
 import { CommonTasks } from 'src/components/CommonTasks/CommonTasks';
 
-function _App(props: any) {
+function _App() {
     useEffect(() => {
         const user = LocalStorageSafe.getItem<IUser>('user');
         if (!user) {
@@ -39,7 +39,7 @@ function _App(props: any) {
                 <CommonTasks path="/" />
                 <CommonTasks path="tasks" />
                 <Login path="login" />
-                <Task path="task/:id" />
+                <Task path="task/:slug" />
                 <NotFound default />
             </Router>
         </div>
