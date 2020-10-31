@@ -18,7 +18,6 @@ function _TaskPage() {
 
     const role = UserStore.user?.type;
     const Component = role === UserType.teacher ? TeacherPage : StudentPage;
-    console.log(TaskStore.task);
 
     return (
         <Component path="tasks">

@@ -44,7 +44,7 @@ function _User() {
                 danger={isEditorRunning}
                 loading={isEditorChanging}
             >
-                {editorButtonMessage}
+                {!isEditorChanging && editorButtonMessage}
             </Button>
             <Button className={styles.logOutButton} onClick={onLogOut}>
                 Выйти

@@ -6,6 +6,7 @@ import { User } from 'src/components/User/User';
 
 import logo from 'src/components/DefaultLayout/logo.png';
 import styles from 'src/components/DefaultLayout/DefaultLayout.module.css';
+import { WindowHelper } from 'src/helpers/WindowHelper';
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,7 +35,12 @@ export function DefaultLayout({ children, indexMenuItem, menuItems, setIndexMenu
                             key={`${index}`}
                             onClick={() => {
                                 setIndexMenuItem(index);
-                                navigate(item.path);
+                                const isExternalLink = item.path.startsWith('http');
+                                if (isExternalLink) {
+                                    WindowHelper.open(item.path, '_blank');
+                                } else {
+                                    navigate(`/${item.path}`);
+                                }
                             }}
                         >
                             {item.title}

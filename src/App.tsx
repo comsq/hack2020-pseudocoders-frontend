@@ -33,15 +33,15 @@ function _App() {
             <Router className={styles.router}>
                 {UserStore.user?.type === UserType.teacher && (
                     <>
-                        <TeacherCreateTask path="create" />
-                        <TeacherTasks path="tasks" />
-                        <TeacherStudents path="students" />
+                        <TeacherCreateTask path="/create" />
+                        <TeacherTasks path="/tasks" />
+                        <TeacherStudents path="/students" />
                     </>
                 )}
-                <TeacherMonitor path="monitoring" />
+                <TeacherMonitor path="/monitoring" />
                 <IndexComponent path="/" />
-                <Login path="login" />
-                <Task path="task/:id" />
+                <Login path="/login" />
+                <Task path="/task/:id" />
                 <NotFound default />
             </Router>
         </div>

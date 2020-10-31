@@ -2,6 +2,13 @@
     display: flex;
     height: 100vh;
     flex-direction: column;
+    min-width: 970px;
+}
+
+@media (max-width: 1100px) {
+    :global(.ant-menu-dark.ant-menu-horizontal) > :global(.ant-menu-item) {
+        padding: 0 10px !important;
+    }
 }
 
 .router {
