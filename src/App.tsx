@@ -39,7 +39,7 @@ function _App(props: any) {
                 <CommonTasks path="/" />
                 <CommonTasks path="tasks" />
                 <Login path="login" />
-                <Task path="task/:id" />
+                <Task path="task/:slug" />
                 <NotFound default />
             </Router>
         </div>

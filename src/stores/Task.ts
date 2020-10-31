@@ -43,7 +43,10 @@ function getApi() {
             const res = await axios.get<ITask[]>(`/api/users/${user_id}/tasks/`);
 
             return res.data;
-        }
+        },
+        async sendTask(userId: string, taskId: string, lang: string) {
+            await axios.post<ITask[]>(`/tasks/verify/user/${userId}/task/${taskId}/language/${lang}`);
+        },
     };
 }
 
@@ -61,10 +64,13 @@ class TaskStoreClass {
         const task = await this.api.loadTask(id);
         this.task = task;
     }
-
     async getListByUser(user_id: number) {
         const listUser = await this.api.loadListByUser(user_id);
         this.listUser = listUser;
+    }
+
+    async sendTask(userId: string, taskId: string, lang: string) {
+        await this.api.sendTask(userId, taskId, lang);
     }
 }
 

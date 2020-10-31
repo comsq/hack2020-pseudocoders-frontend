@@ -35,6 +35,16 @@
     margin-right: 0;
 }
 
+.test {
+    margin-bottom: 30px;
+}
+
+.testName {
+    padding: 10px 0;
+    background: #E2F7DC;
+    text-align: center;
+}
+
 .paragraph {
     margin-top: 20px;
     padding: 20px 20px;
@@ -43,6 +53,7 @@
 }
 
 .file {
+    margin-bottom: 5px;
     border: 1px solid #A0A0A0;
 }
 
@@ -55,6 +66,20 @@
 
 .fileContent {
     padding: 10px 20px;
+}
+
+.buttonBlock {
+    justify-content: flex-end;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.buttonEditor {
+    margin-left: 10px;
+}
+
+.selectLang {
+    min-width: 100px;
 }
 
 @media (min-width: 780px) {
