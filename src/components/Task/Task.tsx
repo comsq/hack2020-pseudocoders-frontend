@@ -103,8 +103,9 @@ function _TaskPage({ slug }: any) {
                     <div className={styles.buttonBlock}>
                         {role === UserType.student ? (
                             <>
-                                <div>
+                                <div className={styles.selectCheckTask}>
                                     <Button
+                                        className={styles.chekTaskButton}
                                         onClick={handleSendTask}
                                         disabled={!UserStore.user?.id || !lang || !TaskStore.task.id}
                                         type="primary"
