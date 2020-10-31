@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Group, GroupStore } from 'src/components/TeacherPage/TeacherStudents/GroupStore';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
@@ -22,9 +22,15 @@ function _GroupsPage() {
     const [visibleCreateGroupModal, setVisibleCreateGroupModal] = useState(false);
     const [visibleEditGroupModal, setVisibleEditGroupModal] = useState(false);
     const isEditMode = visibleEditGroupModal;
+    const isMounted = useRef(false);
 
     useEffect(() => {
+        isMounted.current = true;
         waitDefaultGroup();
+
+        return () => {
+            isMounted.current = false;
+        };
     }, []);
 
     async function waitDefaultGroup() {
@@ -39,7 +45,7 @@ function _GroupsPage() {
                 ? GroupStore.list.data.find((group) => group.id === currentGroupId)
                 : GroupStore.list.data?.[0];
         }
-        setCurrentGroup(currentGroup);
+        isMounted.current && setCurrentGroup(currentGroup);
     }
 
     if (GroupStore.list.isLoading || UserStore.list.isLoading || TaskStore.list.isLoading || !currentGroup) {
