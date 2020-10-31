@@ -39,7 +39,7 @@ export function DefaultLayout({ children, indexMenuItem, menuItems, setIndexMenu
                                 if (isExternalLink) {
                                     WindowHelper.open(item.path, '_blank');
                                 } else {
-                                    navigate(item.path);
+                                    navigate(`/${item.path}`);
                                 }
                             }}
                         >
