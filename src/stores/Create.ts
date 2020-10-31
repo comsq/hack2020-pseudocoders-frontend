@@ -1,25 +1,22 @@
+import axios from 'axios';
+import slugify from 'slugify';
 import { makeAutoObservable } from 'mobx';
 
-export interface Language {
+export interface ILanguage {
     name: string;
     slug: string;
     id: string;
 }
 
-const HOST_API = 'http://api.pseudocoders.online/api/';
-
 function getApi() {
     return {
         async loadLanguages() {
-            const response = await fetch(`${HOST_API}languages/`, { method: 'get' });
-            if (response.ok) {
-                return response.json();
-            }
+            const response = await axios.get<ILanguage[]>(`/api/languages/`);
+            return response.data;
         },
 
         async saveTask(data: any) {
-            console.log(JSON.stringify(data));
-            const response = await fetch(`${HOST_API}tasks/`, { method: 'post', body: JSON.stringify(data) });
+            const response = await axios.post(`/api/tasks/create/`, { ...data, slug: slugify(data.name) });
             return response.status;
         },
     };

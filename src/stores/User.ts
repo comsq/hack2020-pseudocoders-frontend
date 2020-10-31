@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
+import { AsyncHelper } from 'src/helpers/AsyncHelper';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
-
-function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 export enum UserType {
     student = 'student',
@@ -55,7 +52,7 @@ function getApi() {
 
             let res: IEditor = await this.editorStatus(userId);
             while (res?.status !== 'running') {
-                await sleep(1000);
+                await AsyncHelper.delay(1000);
                 res = await this.editorStatus(userId);
             }
 
@@ -67,7 +64,7 @@ function getApi() {
 
             let res: IEditor = await this.editorStatus(userId);
             while (res?.status !== 'exited') {
-                await sleep(1000);
+                await AsyncHelper.delay(1000);
                 res = await this.editorStatus(userId);
             }
 

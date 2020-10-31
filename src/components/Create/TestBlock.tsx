@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styles from 'src/components/Create/Create.module.css';
 import { Button, Input } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 const { TextArea } = Input;
 
 const TestBlock = ({ input, output, idx, onChangeTests, onDelete }: any) => {
@@ -19,7 +19,7 @@ const TestBlock = ({ input, output, idx, onChangeTests, onDelete }: any) => {
                 <Button
                     className={styles.removeButton}
                     onClick={onDelete}
-                    icon={<CloseOutlined />}
+                    icon={<DeleteOutlined />}
                     shape="circle"
                     danger
                 />
