@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { RouteComponentProps, Link } from '@reach/router';
+import { RouteComponentProps, Link, navigate } from '@reach/router';
 import { ColumnsType } from 'antd/lib/table';
 import { Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
@@ -53,8 +53,6 @@ function _TasksPage() {
             UserStore.user?.type === UserType.student && {
                 title: 'Вердикт',
                 dataIndex: 'verdict',
-                sorter: getStringSorter('verdict'),
-                ...getColumnSearchProps('verdict'),
             },
         ].filter(Boolean);
 
@@ -63,21 +61,32 @@ function _TasksPage() {
 
     function calculateVerdict(verdict: any) {
         if (verdict) {
-            return verdict;
+            return {
+                title: verdict,
+                className: verdict,
+            }
         }
 
-        return 'no solution';
+        return {
+            title: 'no solution',
+            className: 'no-solution',
+        };
     }
 
     function getDataSource() {
         return (tasks as ITask[]).map(({ author, languages, name, slug, verdict, id }) => {
-            const prepareVerdict = user?.type === UserType.teacher ? undefined : <div>{calculateVerdict(verdict)}</div>;
+            const prepareVerdict = calculateVerdict(verdict);
+            const nodeVerdict = user?.type === UserType.teacher ? undefined : (
+                <div className={styles[prepareVerdict.className]} >
+                    {prepareVerdict.title}
+                </div>
+            );
 
             return {
                 author: UserUtils.getFullName(author),
                 name: <Link to={`/task/${slug}`}>{name}</Link>,
                 languages: languages.map((language) => language.name).join(' '),
-                verdict: prepareVerdict,
+                verdict: nodeVerdict,
                 key: id,
             };
         });
@@ -161,6 +170,15 @@ function _TasksPage() {
 
     return (
         <div>
+            {user?.type === UserType.teacher && (
+                <Button
+                    type="primary"
+                    onClick={() => navigate('/create')}
+                    className={styles.createButton}
+                >
+                    Создать задачу
+                </Button>
+            )}
             <Table<RecordType>
                 locale={{
                     emptyText: 'пустой список',

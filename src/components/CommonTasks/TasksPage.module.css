@@ -2,10 +2,6 @@
     padding-right: 20px;
 }
 
-.monitorPage {
-    display: flex;
-}
-
 .searchInput {
     width: 188px;
     margin-bottom: 8px;
@@ -19,11 +15,6 @@
 .highlight {
     background-color: #ffc069;
     padding: 0;
-}
-
-.status {
-    display: flex;
-    align-items: center;
 }
 
 .running {
@@ -42,6 +33,10 @@
     color: green;
 }
 
+.no-solution {
+    color: #999;
+}
+
 .stopped,
 .running,
 .ce,
@@ -54,4 +49,8 @@
 
 .status > *:not(:last-child) {
     margin-right: 10px;
+}
+
+.createButton {
+    margin: 20px 16px;
 }
