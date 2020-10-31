@@ -32,6 +32,13 @@ class CreateStoreClass {
         makeAutoObservable(this);
     }
 
+    reset() {
+        this.api = getApi();
+        this.languages = [];
+        this.saveProcess = false;
+        this.saveStatus = 0;
+    }
+
     setLanguages(languages: any) {
         this.languages = languages;
     }

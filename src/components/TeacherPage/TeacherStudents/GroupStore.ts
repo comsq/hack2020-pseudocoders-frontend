@@ -39,6 +39,12 @@ class GroupStoreClass {
         makeAutoObservable(this);
     }
 
+    reset() {
+        this.api = getApi();
+        this.list = new WithLoadingFlags(this.api.loadList);
+        this.isLoading = false;
+    }
+
     async createGroup(data: CreateGroupData) {
         this.isLoading = true;
         const group = await this.api.createGroup(data);

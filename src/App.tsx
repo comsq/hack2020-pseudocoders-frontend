@@ -24,7 +24,7 @@ function _App() {
         }
 
         UserStore.setCheckLogin();
-    }, []);
+    }, [UserStore.user?.id]);
 
     return (
         <div className={styles.app}>
