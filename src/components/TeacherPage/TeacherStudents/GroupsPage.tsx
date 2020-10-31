@@ -40,9 +40,11 @@ function _GroupsPage() {
         const currentGroupId = LocalStorageSafe.getItem<number>(localStorageCurrentGroupKey);
         let currentGroup = GroupStore.list.data?.find((group) => group.id === currentGroupId);
         currentGroup && setCurrentGroup(currentGroup);
-        await GroupStore.list.loadWithSavingState();
-        await UserStore.list.loadWithSavingState();
-        await TaskStore.list.loadWithSavingState();
+        await Promise.all([
+            GroupStore.list.loadWithSavingState(),
+            UserStore.list.loadWithSavingState(),
+            TaskStore.getListByUser(UserStore.user!.id),
+        ]);
         if (!currentGroup) {
             currentGroup = currentGroupId
                 ? GroupStore.list.data.find((group) => group.id === currentGroupId)
@@ -173,13 +175,11 @@ function _GroupsPage() {
                         rules={[{ required: true, message: 'Выберите хотя бы одну задачу' }]}
                     >
                         <Select placeholder="Выберите задачи" mode="multiple">
-                            {TaskStore.list.data
-                                .filter((task) => task.author.id === UserStore.user?.id)
-                                .map((task) => (
-                                    <Option key={task.id} value={task.id}>
-                                        {task.name}
-                                    </Option>
-                                ))}
+                            {TaskStore.listUser?.map((task) => (
+                                <Option key={task.id} value={task.id}>
+                                    {task.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                     <div className={styles.footer}>
@@ -225,7 +225,7 @@ function _GroupsPage() {
                     header={<PageHeader title="Задачи в группе" />}
                     className={styles.tasks}
                     itemLayout="horizontal"
-                    dataSource={TaskStore.list.data.filter((task) => currentGroup.tasks.includes(task.id))}
+                    dataSource={TaskStore.listUser?.filter((task) => currentGroup.tasks.includes(task.id))}
                     renderItem={(task) => (
                         <List.Item>
                             <Link to={`/task/${task.slug}`}>{task.name}</Link>
