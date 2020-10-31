@@ -181,7 +181,9 @@ function _TasksPage() {
             )}
             <Table<RecordType>
                 locale={{
-                    emptyText: 'пустой список',
+                    emptyText: user?.type === UserType.teacher
+                        ? 'Вы не создали ни одной задачи'
+                        : 'Для вас нет задач',
                 }}
                 dataSource={getDataSource()}
                 columns={getColumns()}
