@@ -1,3 +1,24 @@
 .groups {
     padding: 20px;
 }
+
+.studentsAndTasks {
+    display: flex;
+}
+
+.studentsAndTasks *:not(:last-child) {
+    margin-right: 40px;
+}
+
+.subHeader {
+    display: flex;
+}
+
+.subHeader *:not(:last-child),
+.footer *:not(:last-child) {
+    margin-right: 20px;
+}
+
+.footer {
+    display: flex;
+}

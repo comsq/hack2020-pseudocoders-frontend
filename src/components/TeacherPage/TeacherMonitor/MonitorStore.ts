@@ -1,6 +1,7 @@
 import { WithLoadingFlags } from 'src/helpers/StoreHelper';
 import axios from 'axios';
-import { IUser } from 'src/stores/User';
+import { SimpleUser } from 'src/stores/User';
+import { Task } from 'src/stores/Task';
 
 function getApi() {
     return {
@@ -25,11 +26,7 @@ type Language = {
     name: string;
     slug: string;
 };
-export type Task = {
-    id: number;
-    name: string;
-    slug: string;
-};
+
 export type MonitorData = {
     date: number;
     id: number;
@@ -38,7 +35,7 @@ export type MonitorData = {
     status: TaskStatus;
     task: Task;
     tests_count: number;
-    user: Pick<IUser, 'id' | 'login' | 'last_name' | 'first_name'>;
+    user: SimpleUser;
 };
 class MonitorStoreClass {
     api = getApi();

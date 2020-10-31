@@ -8,6 +8,7 @@ import { ColumnsType } from 'antd/lib/table';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { PageSpinner } from 'src/components/PageSpinner/PageSpinner';
+import { UserUtils } from 'src/stores/User';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 function _MonitorPage() {
@@ -81,7 +82,7 @@ function _MonitorPage() {
                     key: id,
                     dateObj,
                     date: `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`,
-                    userName: `${user.first_name} ${user.last_name}`,
+                    userName: UserUtils.getFullName(user),
                     taskName: task.name,
                     language: language.name,
                     testCount: `${passed_tests_count}/${tests_count}`,
