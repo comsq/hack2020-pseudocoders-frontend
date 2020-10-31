@@ -16,6 +16,7 @@ function _MonitorPage() {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchColumn] = useState<keyof RecordType | ''>('');
     const searchInput = useRef() as React.MutableRefObject<Input | null>;
+    const isTeacher = UserStore.user?.type === UserType.teacher;
 
     useEffect(() => {
         MonitorStore.list.addConsumer();
@@ -44,7 +45,7 @@ function _MonitorPage() {
                 dataIndex: 'date',
                 sorter: (data1, data2) => Number(data1.dateObj) - Number(data2.dateObj),
             },
-            UserStore.user?.type === UserType.teacher
+            isTeacher
                 ? {
                       title: 'Ученик',
                       dataIndex: 'userName',
@@ -90,7 +91,7 @@ function _MonitorPage() {
                     key: id,
                     dateObj,
                     date: `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`,
-                    userName: UserUtils.getFullName(UserStore.user?.type === UserType.teacher ? user : task_author),
+                    userName: UserUtils.getFullName(isTeacher ? user : task_author),
                     taskName: task.name,
                     language: language.name,
                     testCount: `${passed_tests_count}/${tests_count}`,
@@ -196,7 +197,13 @@ function _MonitorPage() {
 
     return (
         <div className={styles.courses}>
-            <Table<RecordType> dataSource={getDataSource()} columns={getColumns()} />
+            <Table<RecordType>
+                locale={{
+                    emptyText: isTeacher ? 'Ученики еще не отправляли решения' : 'Вы еще не отправляли решения',
+                }}
+                dataSource={getDataSource()}
+                columns={getColumns()}
+            />
         </div>
     );
 }
