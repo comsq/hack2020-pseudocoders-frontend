@@ -132,7 +132,7 @@ function _Create() {
 
     const [name, setName] = useState(getLocalStorageValue(localStorageName));
 
-    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, null));
+    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, []));
 
     const debouncedSaveInLocalStorage = useDebouncedCallback((nameVariable, value) => {
         saveInLocalStorage(nameVariable, value);

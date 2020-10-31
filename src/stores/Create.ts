@@ -7,12 +7,6 @@ export interface Language {
 }
 
 const HOST_API = 'http://api.pseudocoders.online/api/';
-// const commonBody = {
-//     mode: 'cors',
-//     headers: {
-//         'Access-Control-Allow-Origin':'*'
-//     }
-// };
 
 function getApi() {
     return {
