@@ -119,6 +119,8 @@ function _TaskPage({ slug }: any) {
                                     className={styles.buttonEditor}
                                     disabled={!(port && login)}
                                     href={`http://api.pseudocoders.online:${port}/?folder=/home/${login}/project/${slug}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     type="primary"
                                 >
                                     Открыть редактор кода

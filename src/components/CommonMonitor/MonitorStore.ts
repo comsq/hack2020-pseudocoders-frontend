@@ -5,7 +5,11 @@ import { SimpleTask } from 'src/stores/Task';
 
 function getApi() {
     return {
-        async loadList(userId: number): Promise<MonitorData[]> {
+        async loadList(): Promise<MonitorData[]> {
+            const userId = UserStore.user?.id;
+            if (!userId) {
+                return [];
+            }
             const res = await axios.get<MonitorData[]>(`api/users/${userId}/task_checks/`);
             return res.data.sort((md1, md2) => md2.date - md1.date);
         },
@@ -40,11 +44,11 @@ export type MonitorData = {
 };
 class MonitorStoreClass {
     api = getApi();
-    list = new WithLoadingFlags<MonitorData[]>(() => this.api.loadList(UserStore.user!.id));
+    list = new WithLoadingFlags<MonitorData[]>(this.api.loadList);
 
     reset() {
         this.api = getApi();
-        this.list = new WithLoadingFlags<MonitorData[]>(() => this.api.loadList(UserStore.user!.id));
+        this.list = new WithLoadingFlags<MonitorData[]>(this.api.loadList);
     }
 }
 

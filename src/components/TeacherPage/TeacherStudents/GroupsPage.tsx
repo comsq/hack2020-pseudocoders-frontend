@@ -8,6 +8,7 @@ import { UserStore, UserUtils } from 'src/stores/User';
 import { TaskStore } from 'src/stores/Task';
 import { Select } from 'src/antd-extended/Select';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
+import { Link } from '@reach/router';
 const { Option } = Select;
 
 type Values = {
@@ -222,7 +223,11 @@ function _GroupsPage() {
                     className={styles.tasks}
                     itemLayout="horizontal"
                     dataSource={TaskStore.list.data.filter((task) => currentGroup.tasks.includes(task.id))}
-                    renderItem={(task) => <List.Item>{task.name}</List.Item>}
+                    renderItem={(task) => (
+                        <List.Item>
+                            <Link to={`/task/${task.slug}`}>{task.name}</Link>
+                        </List.Item>
+                    )}
                 />
             </div>
         </div>
