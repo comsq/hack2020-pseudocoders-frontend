@@ -50,9 +50,12 @@ class CreateStoreClass {
 
     async saveTask(data: any) {
         this.saveProcess = true;
-        const status = await this.api.saveTask(data);
-        this.saveProcess = false;
+        let status = 500;
+        try {
+            status = await this.api.saveTask(data);
+        } catch {}
         this.saveStatus = status;
+        this.saveProcess = false;
 
         return status;
     }

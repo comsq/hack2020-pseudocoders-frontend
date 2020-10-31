@@ -74,6 +74,7 @@ class TaskStoreClass {
 
     async getListByUser(user_id: number) {
         const listUser = await this.api.loadListByUser(user_id);
+        this.list.isLoading = false;
         this.listUser = listUser;
     }
 

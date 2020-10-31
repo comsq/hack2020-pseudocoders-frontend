@@ -3,7 +3,7 @@ import styles from 'src/components/Create/Create.module.css';
 import { CreateStore, ILanguage } from 'src/stores/Create';
 import { UserStore } from 'src/stores/User';
 import { observer } from 'mobx-react-lite';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import ReactQuill from 'react-quill';
 import { Select } from 'src/antd-extended/Select';
 import { Input, Button, message } from 'antd';
@@ -12,6 +12,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDebouncedCallback } from 'use-debounce';
 
 import TestBlock from './TestBlock';
+import { TaskStore } from 'src/stores/Task';
 
 const { Option } = Select;
 
@@ -116,6 +117,7 @@ function _Create() {
                 tests: getLocalStorageValue(localStorageTests),
             });
             if (status >= 200 && status < 300) {
+                TaskStore.list.load();
                 message.success('Задача сохранена!');
                 const keys = [
                     localStorageName,
@@ -127,7 +129,7 @@ function _Create() {
                 keys.forEach((key) => {
                     localStorage.removeItem(key);
                 });
-                window.location.pathname = '/tasks';
+                navigate('/tasks');
             } else {
                 message.error('Произошла ошибка, попробуйте ещё раз');
             }
@@ -220,6 +222,7 @@ function _Create() {
                 <div style={{ marginBottom: 16 }}>
                     <Input
                         value={name}
+                        required
                         onChange={onChangeName}
                         addonBefore="НАЗВАНИЕ ЗАДАЧИ"
                         placeholder="Бифштексы..."
@@ -254,7 +257,12 @@ function _Create() {
                     Добавить тест
                 </Button>
                 <div className={styles.saveButtonBlock}>
-                    <Button type="primary" onClick={onSaveTask} icon={<SaveOutlined />}>
+                    <Button
+                        type="primary"
+                        onClick={onSaveTask}
+                        loading={CreateStore.saveProcess}
+                        icon={<SaveOutlined />}
+                    >
                         Сохранить задачу
                     </Button>
                 </div>
