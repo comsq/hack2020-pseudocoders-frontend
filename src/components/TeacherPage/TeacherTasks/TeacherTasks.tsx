@@ -9,7 +9,9 @@ function _TeacherTasks() {
     return (
         <WrapperUser>
             <TeacherPage path="tasks">
-                <div>tasks</div>
+                <div style={{ margin: 20 }}>
+                    <a href="/create">Создать задачу</a>
+                </div>
             </TeacherPage>
         </WrapperUser>
     );

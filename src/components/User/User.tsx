@@ -16,6 +16,9 @@ function _User() {
     return (
         <div className={styles.user}>
             <div className={styles.email}>{user?.email}</div>
+            <Button className={styles.logOutButton} onClick={console.log}>
+                Редактор кода
+            </Button>
             <Button className={styles.logOutButton} onClick={onLogOut}>
                 Выйти
             </Button>
