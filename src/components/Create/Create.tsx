@@ -116,6 +116,7 @@ function _Create() {
                 tests: getLocalStorageValue(localStorageTests),
             });
             if (status >= 200 && status < 300) {
+                message.success('Задача сохранена!');
                 const keys = [
                     localStorageName,
                     localStorageDescription,
