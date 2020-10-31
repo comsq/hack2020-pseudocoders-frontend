@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import { DefaultLayout } from 'src/components/DefaultLayout/DefaultLayout';
+import { UserStore } from 'src/stores/User';
 
 interface ITeacherPage {
     path: string;
@@ -22,8 +24,17 @@ const menuItems = [
     },
 ];
 
-export function TeacherPage({ path, children }: ITeacherPage) {
-    const startIndexMenuItem = menuItems.findIndex((item) => item.path === path);
+function _TeacherPage({ path, children }: ITeacherPage) {
+    const extMenuItems = Array.from(menuItems);
+
+    if (UserStore.editor?.status === 'running') {
+        extMenuItems.push({
+            title: 'Редактор',
+            path: `http://api.pseudocoders.online:${UserStore.editor.port}`,
+        });
+    }
+
+    const startIndexMenuItem = extMenuItems.findIndex((item) => item.path === path);
 
     if (startIndexMenuItem === -1) {
         throw new Error('invalid path');
@@ -32,8 +43,10 @@ export function TeacherPage({ path, children }: ITeacherPage) {
     const [indexMenuItem, setIndexMenuItem] = useState(startIndexMenuItem);
 
     return (
-        <DefaultLayout menuItems={menuItems} indexMenuItem={indexMenuItem} setIndexMenuItem={setIndexMenuItem}>
+        <DefaultLayout menuItems={extMenuItems} indexMenuItem={indexMenuItem} setIndexMenuItem={setIndexMenuItem}>
             {children}
         </DefaultLayout>
     );
 }
+
+export const TeacherPage = observer(_TeacherPage);

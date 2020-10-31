@@ -6,6 +6,10 @@
     background: #000d24 !important;
 }
 
+:global(.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover) {
+    background-color: inherit;
+}
+
 .content {
     min-height: calc(100vh - 70px - 64px);
 }
