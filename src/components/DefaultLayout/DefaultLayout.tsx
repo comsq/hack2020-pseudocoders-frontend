@@ -20,21 +20,12 @@ interface IDefaultLayout {
     setIndexMenuItem: (index: number) => void;
 }
 
-export function DefaultLayout({
-    children,
-    indexMenuItem,
-    menuItems,
-    setIndexMenuItem,
-}: IDefaultLayout) {
+export function DefaultLayout({ children, indexMenuItem, menuItems, setIndexMenuItem }: IDefaultLayout) {
     return (
         <Layout>
             <Header>
                 <div className="logo" />
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={[`${indexMenuItem}`]}
-                >
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[`${indexMenuItem}`]}>
                     {menuItems.map((item, index) => (
                         <Menu.Item
                             key={`${index}`}
