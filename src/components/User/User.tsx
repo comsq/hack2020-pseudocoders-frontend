@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from 'src/components/User/User.module.css';
 import { observer } from 'mobx-react-lite';
 import { UserStore } from 'src/stores/User';
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
 import { navigate } from '@reach/router';
 
 function _User() {
@@ -42,8 +42,9 @@ function _User() {
                 className={styles.editorButton}
                 onClick={isEditorRunning ? onStop : onStart}
                 danger={isEditorRunning}
+                loading={isEditorChanging}
             >
-                {isEditorChanging ? <Spin /> : editorButtonMessage}
+                {editorButtonMessage}
             </Button>
             <Button className={styles.logOutButton} onClick={onLogOut}>
                 Выйти

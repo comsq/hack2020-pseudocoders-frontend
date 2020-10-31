@@ -28,17 +28,21 @@ function _GroupsPage() {
     }, []);
 
     async function waitDefaultGroup() {
-        await GroupStore.list.loadIfNotLoaded();
-        await UserStore.list.load();
-        await TaskStore.list.load();
         const currentGroupId = LocalStorageSafe.getItem<number>(localStorageCurrentGroupKey);
-        const currentGroup = currentGroupId
-            ? GroupStore.list.data.find((group) => group.id === currentGroupId)
-            : GroupStore.list.data?.[0];
+        let currentGroup = GroupStore.list.data?.find((group) => group.id === currentGroupId);
+        currentGroup && setCurrentGroup(currentGroup);
+        await GroupStore.list.loadWithSavingState();
+        await UserStore.list.loadWithSavingState();
+        await TaskStore.list.loadWithSavingState();
+        if (!currentGroup) {
+            currentGroup = currentGroupId
+                ? GroupStore.list.data.find((group) => group.id === currentGroupId)
+                : GroupStore.list.data?.[0];
+        }
         setCurrentGroup(currentGroup);
     }
 
-    if (GroupStore.list.isLoading || UserStore.list.isLoading || TaskStore.list.isLoading) {
+    if (GroupStore.list.isLoading || UserStore.list.isLoading || TaskStore.list.isLoading || !currentGroup) {
         return <PageSpinner />;
     }
 
@@ -178,10 +182,6 @@ function _GroupsPage() {
                 </Form>
             </Modal>
         );
-    }
-
-    if (!currentGroup) {
-        return <div>В данной группе нет учеников</div>;
     }
 
     return (
