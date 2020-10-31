@@ -119,7 +119,7 @@ function _TaskPage({ slug }: any) {
                                 <Button
                                     className={styles.buttonEditor}
                                     disabled={!(port && login)}
-                                    href={`http://api.pseudocoders.online:${port}/?folder=/home/${login}/project/${slug}`}
+                                    href={`http://api.pseudocoders.online:${port}/?folder=/home/coder/project/${slug}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     type="primary"
