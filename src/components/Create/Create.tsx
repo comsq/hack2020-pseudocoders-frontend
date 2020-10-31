@@ -105,7 +105,7 @@ function _Create() {
 
     const [name, setName] = useState(getLocalStorageValue(localStorageName));
 
-    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages));
+    const [languages, setLanguages] = useState(getLocalStorageValue(localStorageLanguages, null));
 
     const debouncedSaveInLocalStorage = useDebouncedCallback((nameVariable, value) => {
         saveInLocalStorage(nameVariable, value);
@@ -163,15 +163,6 @@ function _Create() {
         [],
     );
 
-    if (CreateStore.list.isLoading) {
-        return <>загрузка</>;
-    }
-
-    if (CreateStore.list.hasError) {
-        return <>ошибка</>;
-    }
-
-    console.log(tests);
     return (
         <div className={styles.courses}>
             <div className={styles.container}>
@@ -181,7 +172,7 @@ function _Create() {
                     цвета, добавлять картинки, списки и код
                 </p>
                 <div className={styles.languges}>
-                    <div className={styles.langugesTitle}>ЯЗЫКИ РПОГРАММИРОВАНИЯ</div>
+                    <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
                     <Select
                         className={styles.selectLanguages}
                         mode="tags"

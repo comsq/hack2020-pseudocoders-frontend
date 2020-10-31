@@ -9,7 +9,7 @@ import { Create } from './Create';
 function _TeacherCreateTask() {
     return (
         <WrapperUser>
-            <TeacherPage path="monitoring">
+            <TeacherPage path="tasks">
                 <Create />
             </TeacherPage>
         </WrapperUser>
