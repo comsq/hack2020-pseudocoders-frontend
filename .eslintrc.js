@@ -24,7 +24,7 @@ module.exports = {
     },
     plugins: ['react', '@typescript-eslint', 'prettier'],
     rules: {
-        'prettier/prettier': 'error',
+        'prettier/prettier': 'warn',
         'no-use-before-define': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
@@ -34,5 +34,6 @@ module.exports = {
         'no-shadow': 'off',
         camelcase: 'off',
         '@typescript-eslint/no-explicit-any': 'off',
-    },
+        "no-unused-vars": "off" 
+    }
 };

@@ -23,7 +23,10 @@ function _Login() {
         } catch (error) {
             console.info(error);
             const statusText = error.response?.statusText;
-            const errorText = error.response?.status === 401 ? 'Пользователь не найден' : statusText || error.message;
+            const errorText =
+                error.response?.status === 401
+                    ? 'Пользователь не найден'
+                    : statusText || error.message;
             message.error(`Не удалось войти. ${errorText}`);
         }
     }

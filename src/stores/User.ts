@@ -2,7 +2,7 @@ import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 import { LocalStorageSafe } from 'src/helpers/LocalStorageSafe';
 
-enum UserType {
+export enum UserType {
     student = 'student',
     teacher = 'teacher',
 }

@@ -4,7 +4,13 @@ import { UserStore } from 'src/stores/User';
 import { observer } from 'mobx-react-lite';
 import { Spin } from 'antd';
 
-function _IndexPage() {
+interface IWrapperUser {
+    children: React.ReactElement;
+}
+
+type TWrapperUserObserver = IWrapperUser & RouteComponentProps;
+
+function _WrapperUser({ children }: IWrapperUser) {
     if (!UserStore.checkLogin) {
         return <Spin />;
     }
@@ -12,7 +18,7 @@ function _IndexPage() {
         return <Redirect to={'/login'} noThrow />;
     }
 
-    return <Redirect to={'/courses'} noThrow />;
+    return children;
 }
 
-export const IndexPage = observer<RouteComponentProps>(_IndexPage);
+export const WrapperUser = observer<TWrapperUserObserver>(_WrapperUser);
