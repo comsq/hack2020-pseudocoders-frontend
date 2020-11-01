@@ -185,7 +185,6 @@ function _Create({ slug }: any) {
             await CreateStore.getLanguages();
         })();
 
-        console.log('slug1', slug);
         if (slug) {
             (async () => {
                 await TaskStore.getTask(slug);
@@ -223,7 +222,7 @@ function _Create({ slug }: any) {
         [CreateStore.languages],
     );
 
-    if (TaskStore.task?.author.id !== UserStore.user?.id) {
+    if (slug && TaskStore.task?.author.id !== UserStore.user?.id) {
         return null;
     }
 

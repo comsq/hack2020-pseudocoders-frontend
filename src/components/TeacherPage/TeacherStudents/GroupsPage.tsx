@@ -53,7 +53,8 @@ function _GroupsPage() {
         isMounted.current && setCurrentGroup(currentGroup);
     }
 
-    if (GroupStore.list.isLoading || UserStore.list.isLoading || TaskStore.list.isLoading || !currentGroup) {
+    console.log(GroupStore.list.isLoading, UserStore.list.isLoading, TaskStore.list.isLoading);
+    if (GroupStore.list.isLoading || UserStore.list.isLoading || TaskStore.list.isLoading) {
         return <PageSpinner />;
     }
 
@@ -207,32 +208,34 @@ function _GroupsPage() {
                     Создать группу
                 </Button>
             </div>
-            <div className={styles.studentsAndTasks}>
-                <List
-                    locale={{
-                        emptyText: 'В этой группе нет учеников',
-                    }}
-                    header={<PageHeader title="Список учеников в группе" />}
-                    className={styles.students}
-                    itemLayout="horizontal"
-                    dataSource={UserStore.list.data.filter((user) => currentGroup.users.includes(user.id))}
-                    renderItem={(user) => <List.Item>{UserUtils.getFullName(user)}</List.Item>}
-                />
-                <List
-                    locale={{
-                        emptyText: 'В этой группе нет задач',
-                    }}
-                    header={<PageHeader title="Задачи в группе" />}
-                    className={styles.tasks}
-                    itemLayout="horizontal"
-                    dataSource={TaskStore.listUser?.filter((task) => currentGroup.tasks.includes(task.id))}
-                    renderItem={(task) => (
-                        <List.Item>
-                            <Link to={`/task/${task.slug}`}>{task.name}</Link>
-                        </List.Item>
-                    )}
-                />
-            </div>
+            {currentGroup && (
+                <div className={styles.studentsAndTasks}>
+                    <List
+                        locale={{
+                            emptyText: 'В этой группе нет учеников',
+                        }}
+                        header={<PageHeader title="Список учеников в группе" />}
+                        className={styles.students}
+                        itemLayout="horizontal"
+                        dataSource={UserStore.list.data.filter((user) => currentGroup.users.includes(user.id))}
+                        renderItem={(user) => <List.Item>{UserUtils.getFullName(user)}</List.Item>}
+                    />
+                    <List
+                        locale={{
+                            emptyText: 'В этой группе нет задач',
+                        }}
+                        header={<PageHeader title="Задачи в группе" />}
+                        className={styles.tasks}
+                        itemLayout="horizontal"
+                        dataSource={TaskStore.listUser?.filter((task) => currentGroup.tasks.includes(task.id))}
+                        renderItem={(task) => (
+                            <List.Item>
+                                <Link to={`/task/${task.slug}`}>{task.name}</Link>
+                            </List.Item>
+                        )}
+                    />
+                </div>
+            )}
         </div>
     );
 }
