@@ -4,3 +4,11 @@
     align-items: center;
     justify-content: center;
 }
+
+.input {
+    width: 200px;
+}
+
+.loginWrapper :global(.ant-form-item):nth-last-child(2) {
+    margin-bottom: 0;
+}
