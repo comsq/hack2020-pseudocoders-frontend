@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from 'src/components/Login/Login.module.css';
 import { Form, Input, Button, message } from 'antd';
 import { observer } from 'mobx-react-lite';
@@ -36,6 +36,13 @@ function _Login() {
         wrapperCol: { offset: 8, span: 16 },
     };
 
+    const [passwordValue, setPasswordValue] = useState('');
+    const ruLang = 'абвгдеёжзиклмнопрстуфхцчшщьъёюя';
+    const passwordIncludeRuLang = passwordValue
+        .toLowerCase()
+        .split('')
+        .some((word) => ruLang.includes(word));
+
     return (
         <div className={styles.loginWrapper}>
             <Form {...layout} name="basic" onFinish={onFinish}>
@@ -49,11 +56,13 @@ function _Login() {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input className={styles.input} />
                 </Form.Item>
                 <Form.Item
                     label="Пароль"
                     name="password"
+                    validateStatus={passwordIncludeRuLang ? 'warning' : undefined}
+                    help={passwordIncludeRuLang ? 'Вы вводите русские буквы' : ''}
                     rules={[
                         {
                             required: true,
@@ -61,7 +70,11 @@ function _Login() {
                         },
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password
+                        className={styles.input}
+                        value={passwordValue}
+                        onChange={(e) => setPasswordValue(e.target.value)}
+                    />
                 </Form.Item>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">

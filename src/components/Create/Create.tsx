@@ -15,6 +15,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import TestBlock from './TestBlock';
 import { Select } from 'src/antd-extended/Select';
+import { RandomHelper } from 'src/helpers/RandomHelper';
 
 const { Option } = Select;
 
@@ -90,6 +91,7 @@ const getLocalStorageValue = (nameLocalStorage: string, defaultValue: any = '') 
 interface Test {
     input?: string;
     output?: string;
+    id: number;
 }
 
 export type ChangeTests = (value: string, index: number, nameFile: 'input' | 'output') => void;
@@ -97,7 +99,9 @@ export type ChangeTests = (value: string, index: number, nameFile: 'input' | 'ou
 function _Create({ slug }: any) {
     const [description, setDescription] = useState(getLocalStorageValue(localStorageDescription));
 
-    const [tests, setTests] = useState<Test[]>(getLocalStorageValue(localStorageTests, [{ input: '', output: '' }]));
+    const [tests, setTests] = useState<Test[]>(
+        getLocalStorageValue(localStorageTests, [{ input: '', output: '', id: RandomHelper.getRandomInteger() }]),
+    );
 
     const [name, setName] = useState(getLocalStorageValue(localStorageName));
 
@@ -114,7 +118,7 @@ function _Create({ slug }: any) {
             };
             const status = slug ? await CreateStore.editTask(data, slug) : await CreateStore.saveTask(data);
             if (status >= 200 && status < 300) {
-                TaskStore.list.load();
+                UserStore.user?.id && TaskStore.getListByUser(UserStore.user?.id);
                 message.success('Задача сохранена!');
                 const keys = [
                     localStorageName,
@@ -201,7 +205,7 @@ function _Create({ slug }: any) {
     }, []);
 
     const addTest = useCallback(() => {
-        setTests([...tests, { input: '', output: '' }]);
+        setTests([...tests, { input: '', output: '', id: RandomHelper.getRandomInteger() }]);
     }, [setTests, tests]);
 
     const removeTest = (idx: number) => {
@@ -234,22 +238,20 @@ function _Create({ slug }: any) {
                     Добавьте заголовок и описание задачи. Для красочности вы можете использовать разные цвета, добавлять
                     картинки, списки и код.
                 </p>
-                {
-                    <div className={styles.languges}>
-                        <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
-                        <Select
-                            className={styles.selectLanguages}
-                            mode="multiple"
-                            size="middle"
-                            placeholder="Please select"
-                            defaultValue={languages}
-                            onChange={onChangeLanguages}
-                            style={{ minWidth: '200px' }}
-                        >
-                            {tagsLanguages}
-                        </Select>
-                    </div>
-                }
+                <div className={styles.languges}>
+                    <div className={styles.langugesTitle}>ЯЗЫКИ ПРОГРАММИРОВАНИЯ</div>
+                    <Select
+                        className={styles.selectLanguages}
+                        mode="multiple"
+                        size="middle"
+                        placeholder="Please select"
+                        defaultValue={languages}
+                        onChange={onChangeLanguages}
+                        style={{ minWidth: '200px' }}
+                    >
+                        {tagsLanguages}
+                    </Select>
+                </div>
                 <div style={{ marginBottom: 16 }}>
                     <Input
                         value={name}
@@ -282,7 +284,13 @@ function _Create({ slug }: any) {
 
                 <h3 className={styles.paragraph}>Добавить тесты</h3>
                 {tests.map((item: Test, idx: number) => (
-                    <TestBlock key={idx} idx={idx} {...item} onChangeTests={onChangeTests} onDelete={removeTest(idx)} />
+                    <TestBlock
+                        key={item.id}
+                        idx={idx}
+                        {...item}
+                        onChangeTests={onChangeTests}
+                        onDelete={removeTest(idx)}
+                    />
                 ))}
                 <Button className={styles.addButton} onClick={addTest} icon={<PlusOutlined />}>
                     Добавить тест
